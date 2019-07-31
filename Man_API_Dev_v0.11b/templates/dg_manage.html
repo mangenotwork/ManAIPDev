@@ -1,0 +1,156 @@
+{% include 'head.html' %}
+
+
+
+{% include 'menu_bar.html' %}
+
+<div id="manage_div" style="width: 100%;height: 500px;padding-top: 145px;">
+
+	<div class="container-fluid">
+	  <div class="row-fluid">
+	  
+	    {% include 'manage_nav_tabs.html' %}
+
+
+	    <div class="span10" style="width: 80%;height: 601px;background-color: #DCDCDC;border:1px solid #000;">
+	    	<div id="project_button_div">
+	      		
+	      		<ul class="breadcrumb" style="margin: 0 0 -20px 0">
+					    <li>
+					    	<button class="btn btn-block btn-default" type="button">创建部门</button>
+					    </li>
+					    <li>
+					    	<button class="btn btn-block btn-default" type="button">创建组</button>
+					    </li>
+					    <li>
+					    	<button class="btn btn-block btn-default" type="button" >删除部门</button>
+					    </li>
+					    <li>
+					    	<button class="btn btn-block btn-default" type="button" >删除组</button>
+					    </li>
+					    
+					</ul>
+					<hr style="background-color: #000;height: 2px;">
+
+	  		</div>
+	  		<div style="margin: -20px 0 -10px 0;background-color: #FFF;">
+	  			
+	  			<div id="dg_container" style="height: 500px;"></div>
+		  			<script type="text/javascript">
+					var dom = document.getElementById("dg_container");
+					var myChart = echarts.init(dom);
+var app = {};
+option = null;
+myChart.showLoading();
+
+var data1 = {
+    "name": "部门",
+    "children": [
+        {
+            "name": "管理员",
+            "children": [
+                {
+                     "name": "管理员",
+                     "value": 1
+                }
+                
+            ]
+        },
+        {
+            "name": "研发",
+            "children": [
+                {"name": "产品", "value": 1},
+                {"name": "后台", "value": 2},
+                {"name": "前端", "value": 3},
+                {"name": "ETL", "value": 2},
+                {"name": "测试", "value": 2},
+                {"name": "运维", "value": 1}
+           ]
+        },
+        {
+            "name": "市场",
+            "children": [
+                {"name": "运营", "value": 2}
+            ]
+        },
+        
+    ]
+};
+
+
+myChart.hideLoading();
+
+myChart.setOption(option = {
+    tooltip: {
+        trigger: 'item'//,
+        //triggerOn: 'mousemove'
+    },
+    legend: {
+        top: '2%',
+        left: '3%',
+        orient: 'vertical',
+        data: [{
+            name: '部门架构',
+            icon: 'rectangle'
+        } ,
+        ],
+        borderColor: '#c23531'
+    },
+    series:[
+        {
+            type: 'tree',
+
+            name: '部门架构',
+
+            data: [data1],
+
+            top: '5%',
+            left: '20%',
+            bottom: '2%',
+            right: '30%',
+
+            symbolSize: 7,
+
+            label: {
+                normal: {
+                    position: 'left',
+                    verticalAlign: 'middle',
+                    align: 'right'
+                }
+            },
+
+            leaves: {
+                label: {
+                    normal: {
+                        position: 'right',
+                        verticalAlign: 'middle',
+                        align: 'left'
+                    }
+                }
+            },
+
+            expandAndCollapse: true,
+
+            animationDuration: 550,
+            animationDurationUpdate: 750
+
+        },
+        
+    ]
+});
+
+;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+					       </script>
+	  		</div>
+	   	</div>
+	</div>
+
+
+</div>
+
+
+</body>
+<html>

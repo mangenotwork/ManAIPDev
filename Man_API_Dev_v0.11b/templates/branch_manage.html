@@ -1,0 +1,411 @@
+{% include 'head.html' %}
+
+<body>
+
+
+{% include 'menu_bar.html' %}
+
+<div style="width: 100%;height: 500px;padding-top: 145px;">
+<br>
+<br>
+
+<div class="container-fluid">
+
+<div class="row-fluid">
+		<div class="span2">
+			<span class="nav-header" style="background-color: #000;"><h3 style="color: #fff;">项目管理</h3></span>
+		      	<ul class="nav nav-tabs nav-pills nav-stacked"  style="background-color: #E0FFFF;">
+				  <li><a href="/code">项目列表</a></li>
+				</ul>
+	</div>
+
+	<div class="span10">
+
+		<div class="container" style="width: 98%;">
+		<div class="panel panel-info">
+		    <div class="panel-heading">
+		    	 <span>项目名称： </span><span style="font-size: 20px;" id="project_name">{{project_name}}</span>
+		    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+		         <span>
+			        <button class="btn btn-inverse" onclick="add_dev();">
+			        	<i class="fa fa-files-o"></i>&nbsp;创建开发分支&nbsp;
+			        </button>
+		        </span>
+
+                <!--
+		    	 <span>
+			        <button class="btn btn-inverse">
+			        	<i class="fa fa-plus-circle"></i>&nbsp;创建新的分支 &nbsp;
+			        </button>
+		        </span>
+                -->
+		    	
+		    	<span>
+			        <button class="btn btn-inverse"  onclick="combine_dev();">
+			        	<i class="fa fa-exchange"></i>&nbsp;合并到主分支&nbsp;
+			        </button>
+		        </span>
+		   		
+		        <span>
+			        <button class="btn btn-inverse" onclick="release_project();">
+			        	<i class="fa fa-check-circle"></i>&nbsp;发布版本&nbsp;
+			        </button>
+		        </span>
+                <!--
+		        <span>
+			        <button class="btn btn-inverse" >
+			        	<i class="fa fa-bars"></i>&nbsp;查看历史版本&nbsp;
+			        </button>
+		        </span>
+                -->
+
+		    <span class="tools pull-right">
+		    	<a class="fa fa-sort-amount-asc" href="/code"> 返回项目列表</a>
+		    	<a class="fa fa-cloud-download" href="javascript:;"> 提取</a>
+		    	<a class="fa fa-upload" href="javascript:;"> 提交</a>
+		    	<a class="fa fa-refresh" href="javascript:;"> 刷新</a>
+		    	
+		    	
+		    </span>
+		    </div>
+		    <div class="panel-body" style="background-color: #E0E0E0;display: block;">
+		        <div class="tree tree-solid-line">
+		        	<div id="container" style="height: 500px;"></div>
+		        	<div>
+		        		<a href="#" class="btn-success disabled">&nbsp;&nbsp;可发布分支(Release)&nbsp;&nbsp;</a>
+		        		<a href="#" class="btn-primary disabled">&nbsp;&nbsp;主分支(Master)&nbsp;&nbsp;</a>
+		        		<a href="#" class="btn-danger disabled">&nbsp;&nbsp;Dev分支(Branch)&nbsp;&nbsp;</a>
+		        	</div>
+		        </div>
+		    </div>
+		</div>
+		</div>
+		 <hr>
+
+	</div>
+	                   
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</body>
+<script type="text/javascript">
+
+    // ajax post 通用方法4
+    function post_api_ajax4(postdata,url_data,Func){
+      console.log(postdata);
+      $.ajax({
+                url : url_data,//需要提交的Url地址 默认get方式 //
+                type: "POST",
+                data: postdata,
+                async : true,// true 设置下，所有请求均为异步请求
+                cache : false, //设置为 false 将不会从浏览器缓存中加载请求信息。
+                //dataType: "json",
+                //错误回调函数
+                error : function(xhr) {
+                    alert('请求状态： 错误:' + xhr.responseText);
+                },   
+                success: function(data,status){
+                      if(Func){
+                        Func(data);
+                      }
+                      else{
+                        alert(data);
+                      }
+                }
+            });
+    }
+
+
+
+    // 创建开发分支
+    function add_dev_show(datas){
+        alert(datas);
+        location.reload();
+    }
+
+    function add_dev(){
+        //alert($("#project_name").text());
+        //alert("{{project_work}}");
+        var usernames = $("#user_name").text().split('"')[1];
+        var adddevdata = {
+            "project_name":$("#project_name").text(),
+            "now_work":"{{project_work}}",
+            "user_name":usernames
+        };
+        alert(adddevdata);
+
+        var url = "http://127.0.0.1:9888/addbranch";
+
+        post_api_ajax4(adddevdata,url,add_dev_show);
+    }
+
+
+
+
+    //发布版本
+    function release_project_show(datas){
+        alert(datas);
+        location.reload();
+    }
+
+
+    function release_project(){
+        var usernames = $("#user_name").text().split('"')[1];
+        var releasedata = {
+            "project_name":$("#project_name").text(),
+            "now_work":"{{project_work}}",
+            "user_name":usernames
+        };
+        alert(releasedata);
+
+        var url = "http://127.0.0.1:9888/releaseedition";
+
+        post_api_ajax4(releasedata,url,release_project_show);
+    }
+
+
+
+//合并分支
+    function combine_dev_show(datas){
+        alert(datas);
+        location.reload();
+    }
+
+
+    function combine_dev(){
+        var usernames = $("#user_name").text().split('"')[1];
+        var releasedata = {
+            "project_name":$("#project_name").text(),
+            "now_work":"{{project_work}}",
+            "user_name":usernames
+        };
+        alert(releasedata);
+
+        var url = "http://127.0.0.1:9888/mergetomaster";
+
+        post_api_ajax4(releasedata,url,combine_dev_show);
+    }
+
+
+</script>
+
+
+
+ <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+
+var project_name = "项目当前活动空间： {{project_work}}";
+/*
+var branch_data = "{{branch_data}}";
+var link_info = "{{link_info}}";
+var a = stringify(branch_data);
+alert(stringify(branch_data));
+alert(typeof(a));
+alert(typeof(link_info));
+*/
+
+
+function get_branch_data(string_datas){
+    var names = string_datas.split('&#34;');
+    names.splice(names.length-1,names.length);
+    name = names.join('"');
+    return name;
+}
+
+
+var branch_data = [];
+
+
+
+var branch_name_input='';
+
+{% for a in return_project_data_dic %}
+    //console.log("test");
+    //console.log("{{a.project_name_val}}");
+    //console.log("{{a.project_time_val}}");
+    branch_name_input =   {
+                    name: '{{a.project_name_val}}',
+                    x: '{{a.x_val}}',
+                    y: '{{a.y_val}}',
+                    itemStyle: {
+                        color: '{{a.color_val}}'
+                    },
+                   value:['{{a.project_time_val}}']
+
+                }
+    //console.log(branch_name_input);
+    branch_data.push(branch_name_input);
+{% endfor %}
+
+
+var link_info = [];
+
+var link_info_input='';
+
+{% for link_info_val in return_project_link_info %}
+    //console.log("test");
+    //console.log("{{link_info_val.now_branch_name}}");
+    //console.log("{{link_info_val.parent_branch_name}}");
+    link_info_input =   {
+                    source: '{{link_info_val.parent_branch_name}}',
+                    target: '{{link_info_val.now_branch_name}}'
+                }
+    //console.log(link_info_input);
+    link_info.push(link_info_input);
+{% endfor %}
+
+/*
+var link_info = [{
+                    source: "man9-v0-0",
+                    target: "man9-v0-1"
+                }, 
+                    {
+                    source: "man9-v0-0",
+                    target: "man9-v0-2"
+                },
+                    {
+                    source: "man9-v0-2",
+                    target: "man9-v0-3"
+                }];
+
+console.log(branch_data);
+console.log(link_info);
+
+
+var branch_data = [{
+                    name: '主分支',
+                    x: 10,
+                    y: 300,
+                    itemStyle: {
+                        color: '#0066CC'
+                    },
+                   value:["[Main] 2019-03-03"]
+
+                }, 
+                {
+                    name: '待创建发布分支',
+                    x: 20,
+                    y: 290,
+                    itemStyle: {
+                        color: '#01B468'
+                    },
+                   value:["[Main] 2019-03-03"]
+
+                }, 
+                    {
+                    name: '主分支v1.0',
+                    x: 40,
+                    y: 300,
+                    itemStyle: {
+                        color: '#0066CC'
+                    },
+                    value:["[Main] 2019-03-03"]
+                }, 
+                    {
+                    name: '等待发布',
+                    x: 70,
+                    y: 300,
+                    itemStyle: {
+                        color: '#0066CC'
+                    },
+                    value:["[Main] 2019-03-03"]
+                }, 
+                    {
+                    name: '分支',
+                    x: 20,
+                    y: 310,
+                    value:["[Branch] 2019-03-03"]
+                }];
+
+
+link_info = [{
+                    source: '主分支',
+                    target: '主分支v1.0'
+                }, 
+                    {
+                    source: '主分支v1.0',
+                    target: '等待发布'
+                },
+                    {
+                    source: '分支',
+                    target: '主分支v1.0'
+                },
+                    {
+                        source: '主分支',
+                        target: '分支'
+                },
+                {
+                        source: '主分支',
+                        target: '待创建发布分支'
+                }];
+*/
+
+
+
+option = null;
+option = {
+    
+    title: {
+        text: project_name
+    },
+
+    tooltip: {},
+    animationDurationUpdate: 1500,
+    animationEasingUpdate: 'quinticInOut',
+    series : [
+        {
+            type: 'graph',
+            layout: 'none',
+            symbolSize: 50,
+            roam: true,
+            label: {
+                normal: {
+                    show: true
+                }
+            },
+            edgeSymbol: ['circle', 'arrow'],
+            edgeSymbolSize: [4, 10],
+            edgeLabel: {
+                normal: {
+                    textStyle: {
+                        fontSize: 20
+                    }
+                }
+            },
+
+
+            data: branch_data,
+
+
+            links: link_info,
+
+
+            lineStyle: {
+                normal: {
+                    opacity: 0.9,
+                    width: 2,
+                    curveness: 0
+                }
+            }
+        }
+    ]
+};;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+
+
+
+
+</html>

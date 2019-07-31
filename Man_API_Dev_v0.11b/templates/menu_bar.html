@@ -1,0 +1,402 @@
+
+
+<div class="container" style="position: fixed; z-index:999;top: 0;width: 100%">
+
+
+<div class="navbar navbar-inverse" >
+  <div class="navbar-inner">
+    <div class="container">
+ 		
+    	<div style="width: 100%;">
+    	<div class="row">
+    		<div class="span4">
+    		<!--<a href="/"><h2 style="color: #FFF;">Man API v0.1</h2></a>-->
+    		<a href="/home"><img src="{{ url_for('static', filename='man_api_img/man_logo_1.png') }}"></a>
+    		</div>
+    		 <div class="span5" style="float: right;">
+    		 	<div style="float: right;">
+	    		 	<span style="color: #FFF;"><i class="fa fa-user"></i>&nbsp;
+	    		 	<span id="user_name" style="color:#FFF;"></span>&nbsp;&nbsp;
+	    		 	<img src="./static/man_api_img/man_ioc_2.png" class="img-circle" width="50px;" height="50px;">
+	    		 	&nbsp;&nbsp;&nbsp;
+	    		 	<!--<span style="color: #FFF;"><i class="fa fa-user"></i> </span><span id="user" style="color: red;">未登录</span> -->
+	    		 	<!--
+	    		 	<a type="button" class="btn btn-inverse" href="/login_quit"><i class="fa fa-unlink"></i> 退出 </a>
+	    		 	-->
+    		 	</div>
+    		 	
+    		 </div>
+		</div>
+		</div>
+		<div>
+		<ul class="nav nav-tabs">
+		    <li class="active dropdown">
+		    	<!--
+		    	<a class="dropdown-toggle" data-toggle="dropdown" href="#" onclick="get_flask_list()" >
+		    	-->
+		    	<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+		    		<i class="fa fa-home"></i>
+		     		<span id="newo_project_home">API Home</span>
+		     	</a>
+		    	<ul class="dropdown-menu" id="flask_list">
+		    		<li><a id="Man_API_flask" href="/api_show">Man API Home</a></li>
+		    		<li><a id="Man_API_flask" href="/myapihome">My API</a></li>
+			    </ul>
+		    </li>
+		    <!--<li class="dropdown" onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)" onclick="display_api_list_li_show(this)">-->
+		    <li class="dropdown">
+		    	<!--
+			      <a class="dropdown-toggle" data-toggle="dropdown" href="#" onclick="display_api_list_li_show(this)">
+			        <i class="fa fa-list"></i> 
+			        <span id="project_api_list_title"> API List</span>
+			      </a>
+			      <ul class="dropdown-menu" id="api_list_type" >
+			        <li><a href="#">默认分组</a></li>
+			        <li><a href="#"><i class="fa fa-sitemap"></i> 为Man添加分组</a></li>
+			      </ul>
+			  	-->
+			  	<a href="/code"><i class="fa fa-list"></i> Projects</a>
+		    </li>
+		    <li>
+		    	<a data-toggle="modal" href="#myModal" onclick="open_Modal()"><i class="fa fa-plus-circle"></i> 添加API</a>
+			</li>
+		    <li><a data-toggle="modal" href="#conndb_Modal" onclick="open_Modal()"><i class="fa fa-plug"></i> 连接数据库</a></li>
+		    <li><a onclick="open_DB_pg()"><i class="fa fa-database"></i> DB Home</a></li>
+		    <li><a href="/"><i class="fa fa-user-secret"></i> 我的</a></li>
+		    <!--
+		    <li class="dropdown" onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)" >
+			      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+			        <i class="fa fa-user-secret"></i> 我的 <span class="caret"></span>
+			      </a>
+			      <ul class="dropdown-menu">
+			        <li><a href="#">查看信息</a></li>
+			        <li><a href="#">我的任务</a></li>
+			        <li class="divider"></li>
+			        <li><a href="/login_quit"><i class="fa fa-unlink"></i>退出登录</a></li>
+			      </ul>
+		    </li>
+			-->
+		    <li><a onclick="open_Manage_pg()"><i class="fa fa-cogs"></i> 管理</a></li>
+		    <li class="active">
+		    	
+		    </li>
+	  	</ul>
+      <!-- Everything you want hidden at 940px or less, place within here -->
+      <div class="nav-collapse collapse">
+        <!-- .nav, .navbar-search, .navbar-form, etc -->
+      </div>
+      <form class="navbar-search pull-left">
+				
+								  <input type="text" class="search-query" >
+						<button type="submit" class="btn btn-inverse"><i class="fa fa-search"></i> 查找API </button>		  
+				</form>	
+				<div style="float: right;">
+		<!--
+ 		<h4 class="text-right"><span style="color: #FFF;"><i class="fa fa-database"></i> </span><span id="db_state"></span> </h4>
+		-->
+		<a class="btn btn-inverse" href="/login_quit"><span style="color: #FFF;"><i class="fa fa-unlink"></i> 退出登录</span></a>		
+ 	</div> 
+
+    		</div>
+		</div>
+		<!--<button>1</button>-->
+  </div>
+</div>
+
+
+</div>
+
+
+<!-- 按钮触发模态框 
+<button class="btn btn-primary btn-lg" data-toggle="modal" href="#myModal">
+	开始演示模态框
+</button>-->
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+
+
+				<button type="button" class="close" data-dismiss="modal" 
+						aria-hidden="true" onclick="colse_Modal()">
+				</button>
+
+
+				<h4 class="modal-title" id="myModalLabel">
+					添加API
+				</h4>
+			</div>
+			<div class="modal-body">
+
+				<form  id="add_api_Form" name="add_api_Form">
+				<pre>
+add_api={
+  'api_id' : <input type="text" class="form-control" id="api_id" name="api_id" placeholder="API ID, 必填！">,
+  'api_title' : <input type="text" class="form-control" id="api_title" name="api_title" placeholder="API 介绍, 必填！">,
+  'api_info' : <input type="text" class="form-control" id="api_info" name="api_info" placeholder="API 说明, 必填!">,<button type="button" class="btn btn-link" onclick="add_api_info()"><h5><i class="fa fa-plus"></i></h5></button><div id="api_info_g"></div>
+  'api_type' : <select class="form-control" id="api_type" name="api_type">
+      <option>GET</option>
+      <option>POST</option>
+      <option>PUT</option>
+      <option>SET</option>
+      <option>PUSH</option>
+    </select>,
+  'api_data' : <input type="text" class="form-control" id="api_data" name="api_data"><button type="button" class="btn btn-link" onclick="add_api_data()"><h5><i class="fa fa-plus"></i></h5></button><div id="api_data_g"></div>
+}    
+				</pre>
+			</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" 
+						data-dismiss="modal" onclick="colse_Modal()">关闭
+				</button>
+				<button type="button" class="btn btn-primary" id="add_api" onclick="add_api_ajax(this)">
+					提交更改
+				</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<!-- 连接数据库模态框（conndb_Modal） -->
+<div class="modal fade" id="conndb_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+	<div class="modal-dialog" id="connect_db_input_wite">
+		<div class="modal-content" id="connect_db_input">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="colse_Modal()">×
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					连接数据库 <div id="connect_db_return"></div>
+				</h4>
+			</div>
+			<div class="modal-body">
+
+
+				<pre>
+
+  数据库地址 : <input type="text" class="form-control" id="conn_host" placeholder="127.0.0.1">
+  数据库端口 : <input type="text" class="form-control" id="conn_port" placeholder="3306">
+  数据库库名 : <input type="text" class="form-control" id="conn_db_name" placeholder="habl">
+  DB ACC : <input type="text" class="form-control" id="conn_db_acc" placeholder="root">
+  Password : <input type="text" class="form-control" id="conn_db_password">	
+				</pre>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" 
+						data-dismiss="modal" onclick="colse_Modal()">关闭
+				</button>
+				<a type="button" class="btn btn-primary" id="connect_db_ajax">
+					提交并连接
+				</a>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<script type="text/javascript">
+	function displaySubMenu(li) {
+ 
+    var subMenu = li.getElementsByTagName("ul")[0];
+ 
+    subMenu.style.display = "block";
+ 
+}
+ 	
+ 	var api_list_li_show_lock = true;
+	function display_api_list_li_show(li){
+		
+		if(api_list_li_show_lock){
+    		$("#api_list_type").show();
+    		api_list_li_show_lock = false;
+		}
+		else{
+			$("#api_list_type").hide();
+			api_list_li_show_lock = true;
+		}
+	}
+
+	function hideSubMenu(li) {
+ 
+    	var subMenu = li.getElementsByTagName("ul")[0];
+ 
+    	subMenu.style.display = "none";
+}
+</script>
+
+<script type="text/javascript">
+	var add_api_number = 0;
+	var add_api_dat = 0
+
+	//添加 api info
+	function add_api_info(){
+		add_api_number+=1;
+		console.log("add_api_info() add_api_number = "+add_api_number);
+		var set_api_info_button_id = "api_info_"+add_api_number.toString();
+		var api_info_s = '<input type="text" class="form-control" id="'+set_api_info_button_id+'" name="api_info_'+add_api_number+'" placeholder="'+set_api_info_button_id+'">'
+		var set_api_info_button = '<button type="button" class="btn btn-link" id="remove_api_info" onclick="close_add_api_info('+add_api_number+')"><h3>-</h3></button>'
+		$("button").remove("#remove_api_info");
+		$("#api_info_g").append(api_info_s);
+		$("#api_info_g").append(set_api_info_button);
+		
+		
+	}
+
+	// 关闭添加 api 
+	function close_add_api_info(e){
+		console.log("close_add_api_info() add_api_number = "+add_api_number);
+		//alert(e)
+		$("button").remove("#remove_api_info");
+		add_api_number-=1;
+		$("#api_info_"+e.toString()).remove();
+		if(e < 2){
+			add_api_number = 0;
+		}
+		else{
+			var set_api_info_button = '<button type="button" class="btn btn-link" id="remove_api_info" onclick="close_add_api_info('+add_api_number+')"><h3>-</h3></button>'
+			$("#api_info_g").append(set_api_info_button);
+		}
+	}
+
+
+	//添加api 数据
+	function add_api_data(){
+		add_api_dat+=1;
+		console.log("add_api_data() add_api_dat = "+add_api_dat);
+		var set_api_data_button_id = "api_data_"+add_api_dat.toString();
+		var api_data_s = '<input type="text" class="form-control" id="'+set_api_data_button_id+'" name="api_data_'+add_api_dat+'" placeholder="'+set_api_data_button_id+'">'
+		var set_api_data_button = '<button type="button" class="btn btn-link" id="remove_api_data" onclick="close_add_api_data('+add_api_dat+')"><h3>-</h3></button>'
+		$("button").remove("#remove_api_data");
+		$("#api_data_g").append(api_data_s);
+		$("#api_data_g").append(set_api_data_button);
+		
+		
+	}
+
+	//关闭添加api 数据
+	function close_add_api_data(e){
+		console.log("close_add_api_data() add_api_dat = "+add_api_dat);
+		//alert(e)
+		$("button").remove("#remove_api_data");
+		add_api_dat-=1;
+		$("#api_data_"+e.toString()).remove();
+		if(e < 2){
+			add_api_dat = 0;
+		}
+		else{
+			var set_api_data_button = '<button type="button" class="btn btn-link" id="remove_api_data" onclick="close_add_api_data('+add_api_dat+')"><h3>-</h3></button>'
+			$("#api_data_g").append(set_api_data_button);
+		}
+	}
+
+
+	//关闭弹出框
+	function colse_Modal(){
+		$("#api_info_g").empty();
+		$("#api_data_g").empty();
+		$("#connect_db_return").empty();
+		$("#myModal").hide();
+		$("#conndb_Modal").hide();
+		$("#conndb_Modal input").val("");
+		$("#myModal input").val("");
+		add_api_number = 0;
+		add_api_dat = 0;
+		/*
+  		for(add_api_input in add_api_number){
+  			$("#api_info_"+add_api_input).remove();
+  		}
+  		*/
+	}
+
+	function open_Modal(){
+		$("#myModal").show();
+		$("#conndb_Modal").show();
+	}
+
+	function open_DB_pg(){
+		window.location.href = '/db_doing';
+		
+	}
+
+	function open_Manage_pg(){
+		window.location.href = '/usermanage';
+	}
+
+
+function set_flask_list(datas){
+	var get_datas = JSON.parse(datas);
+	//alert(datas);
+	$("#flask_list").empty()
+	$("#flask_list").append('<li><a id="Man_API_flask" href="/api_show" onclick="goto_flask_project_home(this)">Man API Home</a></li>')
+	for(var i in get_datas){
+		//alert(get_datas[i]);
+		var show_list = '<li><a id="'+get_datas[i]+'_flask" onclick="goto_flask_project_home(this)">'+get_datas[i]+'</a></li>'
+		$("#flask_list").append(show_list)
+	}
+}
+
+//获取flask list
+function get_flask_list(){
+	//get_flask_list_name
+	//alert("get_api_ajax2")
+	$("#api_list_type").hide();
+	api_list_li_show_lock = true;
+	
+	get_api_ajax2("get_flask_list_name",set_flask_list)
+}
+
+
+
+
+function get_name(string_datas){
+	var names = string_datas.split('_');
+  	names.splice(names.length-1,names.length);
+  	name = names.join('_');
+  	return name
+}
+
+//显示当前 操作项目名称 
+function goto_flask_project_home(obj){
+	//alert(obj.id);
+
+
+
+
+	var project_name = get_name(obj.id)
+  	//alert(project_name);
+	$("#newo_project_home").empty();
+	$("#newo_project_home").append(project_name);
+
+	$("#project_api_list_title").empty();
+	$("#project_api_list_title").append(project_name+' API List');
+
+	var project_api_list_show_top = '<li><a href="#">默认分组</a></li>';
+	var project_api_list_show_bottom = '<li><a href="#"><i class="fa fa-sitemap"></i> 为'+project_name+'添加分组</a></li>';
+
+	$("#api_list_type").empty();
+	$("#api_list_type").append(project_api_list_show_top);
+	$("#api_list_type").append(project_api_list_show_bottom);
+}
+
+function set_user_name(datas){
+	//alert(datas);
+	$("#user_name").append(datas);
+}
+
+function get_user_name(){
+	var url_data = "getusername";
+	get_api_ajax2(url_data,set_user_name);
+}
+
+get_user_name();
+
+
+
+
+
+
+</script>

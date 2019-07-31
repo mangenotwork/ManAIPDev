@@ -1,0 +1,430 @@
+{% include 'head.html' %}
+
+<body>
+
+
+{% include 'menu_bar.html' %}
+
+
+
+
+
+<!--
+<div style="width: 100%;position: fixed;padding-top: 140px;">
+	      		
+	      		<ul class="breadcrumb" style="margin: 0 0 -20px 0">
+	      				<li style="width: 200px;">API List Name : 默认</li>
+					    <li><a ><button>创建API分组</button></a></li>
+					    <li><a ><button>查看分组列表</button></a></li>
+					    <li><a ><button>分组操作</button></a></li>
+					    
+					</ul>
+					<hr style="background-color: #000;height: 2px;">
+
+	</div>
+-->
+
+<div class="container" style="width: 98%;position: relative;padding-top: 145px;">
+<div class="accordion container" id="accordion2" style="width: 100%;">
+	
+	{% for api_list in api_data_list %}
+		  <div class="accordion-group" >
+		    <div class="accordion-heading" style="background-color: {{api_list.api_bk_color}}; height: 50px;">
+		      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{api_list.api_id}}">
+		        <h4 style="float: left;color: #000;"> [ {{api_list.api_type}} ] / {{api_list.api_name}}</h4>
+		      </a>
+		      	 <a class="accordion-toggle" style="float: right;display: inline;" id="{{api_list.api_id}}_operation_open" onclick="open_operation_handle(this)">
+			      	<i class="fa fa-wrench"></i> 操作
+			      </a>
+		      	<div style="display: none;" id="{{api_list.api_id}}_operation_handle">
+		      	  <a class="accordion-toggle" style="float: right;" id="{{api_list.api_id}}_operation_close" onclick="close_operation_handle(this)">
+			      	<!--<a class="accordion-toggle" style="float: right;color: #006400;" data-toggle="modal" href="#updata_api_Modal">-->
+			      	<i class="fa fa-reply"></i>
+			      </a>
+			      <a class="accordion-toggle" style="float: right;color: red;" id="{{api_list.api_id}}_del" onclick="del_api_ajax(this)">
+			      	<i class="fa fa-trash"></i> 删除
+			      </a>
+			      <a class="accordion-toggle" style="float: right;color: #006400;" id="{{api_list.api_id}}_update" onclick="get_api_info(this)">
+			      	<!--<a class="accordion-toggle" style="float: right;color: #006400;" data-toggle="modal" href="#updata_api_Modal">-->
+			      	<i class="fa fa-pencil-square"></i> 修改
+			      </a>
+			       <a class="accordion-toggle" style="float: right;color: #FF9900;" id="{{api_list.api_id}}_update" onclick="get_api_info(this)">
+			      	<!--<a class="accordion-toggle" style="float: right;color: #006400;" data-toggle="modal" href="#updata_api_Modal">-->
+			      	<i class="fa fa-tags"></i> 分组
+			      </a>
+			      
+		  		</div>
+		    </div>
+		    <div id="{{api_list.api_id}}" class="accordion-body collapse">
+		      <div class="accordion-inner">
+		        <table class="table">
+					<!-- 	/api_test 	-->
+			    	<tr class={{api_list.api_type_bk_style}}>
+				      <td width="10%;"><b>[接口名称]:</b> <p> {{api_list.api_name}} </p> </td>
+				      <td width="10%;"><b>[描述]:</b><p> {{api_list.api_title}} </p></td>
+				      <td width="20%;">
+				        <ul>
+				        	<b>[说明]:</b>
+				        	{% for api_info_li in api_list.api_info %}
+				            	<li>{{api_info_li}}</li>
+				            {% endfor %}
+				        </ul>
+				      </td>
+				      <td width="25%;">
+				      	<b>[执行方法]:</b>
+				      	{% if api_list.api_data %}
+				      	 <pre style="width: 80%;">     		
+data={
+{% for data_info in api_list.api_data %}
+    {{data_info}} : <input type="text" class="form-control" id="{{data_info}}">,
+{% endfor %}
+}
+				      	 </pre>
+				      	{% endif %}
+							<!--<a id="{{api_list.api_id}}_ajax"  class="btn {{api_list.api_type_button_style}}" onclick="get_api_ajax( {{api_list.api_id}} )">{{api_list.api_type}}</a>-->
+							<a id="{{api_list.api_id}}"  class="btn {{api_list.api_type_button_style}}" onclick="get_api_ajax(this)">{{api_list.api_type}}</a>
+				      </td>
+				      <td width="25%;">
+				      	<b>[返回值]:</b>
+				        <pre style="width: 80%;" id="respones_{{api_list.api_id}}"></pre>
+				      </td>
+				    </tr>
+    			</table>
+		      </div>
+		    </div>
+		  </div>
+	{% endfor %}
+</div>
+</div>	
+
+<!-- 修改api库模态框（updata_api_Modal） -->
+<div class="modal fade" id="updata_api_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+	<div class="modal-dialog" id="connect_db_input_wite">
+		<div class="modal-content" id="connect_db_input">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="updata_colse_Modal()">×
+				</button>
+				<h4 class="modal-title" id="updata_api_Modal_title">
+					<div id="connect_db_return"></div>
+				</h4>
+			</div>
+			<div class="modal-body">
+
+				<form  id="updata_api_Form" name="updata_api_Form">
+				<pre>
+add_api={
+  'api_id' : <input type="text" class="form-control" id="updata_api_id" name="updata_api_id" readonly="readonly">,
+  'api_title' : <input type="text" class="form-control" id="updata_api_title" name="updata_api_title" placeholder="API 介绍, 必填！">,
+  'api_info' : <input type="text" class="form-control" id="updata_api_info" name="updata_api_info" placeholder="API 说明, 必填!">,<button type="button" class="btn btn-link" onclick="updata_add_api_info()"><h5><i class="fa fa-plus"></i></h5></button><div id="updata_api_info_g"></div>
+  'api_type' : <select class="form-control" id="updata_api_type" name="updata_api_type">
+      <option>GET</option>
+      <option>POST</option>
+      <option>PUT</option>
+      <option>SET</option>
+      <option>PUSH</option>
+    </select>,
+  'api_data' : <input type="text" class="form-control" id="updata_api_data" name="updata_api_data"><button type="button" class="btn btn-link" onclick="updata_add_api_data()"><h5><i class="fa fa-plus"></i></h5></button><div id="updata_api_data_g"></div>
+}
+				</pre>
+				</form>
+			</div>
+			<div class="modal-footer" id="updata_api_stime">
+				<button type="button" class="btn btn-default" 
+						data-dismiss="modal" onclick="updata_colse_Modal()">关闭 
+				</button>
+				<div id="updata_submit_div" style="float: right;">
+					
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</div>
+
+<script type="text/javascript">
+	function open_operation_handle(obj){
+		var get_id = obj.id.split('_');
+ 		get_id.splice(get_id.length-1,get_id.length);
+  		var operation_id = get_id.join('_')
+		//alert("#"+operation_id+"_handle");
+		var operation_button = "#"+obj.id;
+		var operation_div = "#"+operation_id+"_handle";
+		$(operation_div).show();
+		$(operation_button).hide();
+	}
+	function close_operation_handle(obj){
+		var get_id = obj.id.split('_');
+ 		get_id.splice(get_id.length-1,get_id.length);
+  		var operation_id = get_id.join('_')
+		//alert("#"+operation_id+"_handle");
+		var operation_button = "#"+obj.id;
+		var operation_div = "#"+operation_id+"_handle";
+		var operation_open = "#"+operation_id+"_open";
+		$(operation_div).hide();
+		$(operation_open).show();
+	}
+
+
+//获取 api 信息
+function get_api_info(obj){
+	//alert("Update : "+obj.id);
+  $("#updata_api_Modal_title").empty();
+  $("#updata_submit_div").empty();
+  var get_api_id = obj.id.split('_');
+  get_api_id.splice(get_api_id.length-1,get_api_id.length);
+  api_id = get_api_id.join('_')
+  //console.log(api_id)
+  $("#updata_api_Modal").modal();
+  $("#updata_api_Modal_title").append("修改API : \\"+api_id);
+
+	$.ajax({
+            url : api_path+"/get_api_info?api_id="+api_id,//需要提交的Url地址 默认get方式 //
+            type: "GET",
+            async : true,//默认设置下，所有请求均为异步请求
+            cache : false, //设置为 false 将不会从浏览器缓存中加载请求信息
+            dataType : 'text',//数据类型
+            //错误回调函数
+            error : function(xhr) {
+                alert('请求状态： 错误:' + xhr.responseText);
+            },
+            success: function(data,status){
+				updata_api_number = 0;
+				updata_api_dat = 0;
+                  //alert(status);
+                  //alert(data)
+                  //console.log("get all api info = "+data)
+                  var get_datas = JSON.parse(data);
+
+                  $("#updata_api_id").val(get_datas.return_data.api_id);
+				  $("#updata_api_title").val(get_datas.return_data.api_title);
+				  var updata_api_info_g_val = get_datas.return_data.api_info;
+				  //updata_api_info_g_val = updata_api_info_g_val.split(',');
+				  //console.log(updata_api_info_g_val);
+				  for(key in updata_api_info_g_val) {
+				  	//console.log(key+ " : " + updata_api_info_g_val[key]);
+				  	if(key == 0){
+				  		$("#updata_api_info").val(updata_api_info_g_val[key]);
+				  	}
+				  	else{
+				  		//updata_api_number+=1
+				  		updata_add_api_info();
+				  		$("#updata_api_info_"+updata_api_number).val(updata_api_info_g_val[key]);
+				  	}
+				  }
+				  
+				  $("#updata_api_info_g");
+				  $("#updata_api_type").val(get_datas.return_data.api_type);
+				  
+				  var updata_api_data_g_val = get_datas.return_data.api_data;
+				  //console.log(updata_api_data_g_val);
+				  for(key in updata_api_data_g_val) {
+				  	//console.log(key+ " : " + updata_api_data_g_val[key]);
+				  	if(key == 0){
+				  		$("#updata_api_data").val(updata_api_data_g_val[key]);
+				  	}
+				  	else{
+				  		//updata_api_dat+=1
+				  		updata_add_api_data();
+				  		$("#updata_api_data_"+updata_api_dat).val(updata_api_data_g_val[key]);
+				  	}
+				  }
+				 var updata_submit_button = '<a type="button" class="btn btn-primary" id="updata_api" onclick="updata_api_ajax(this)">提交并连接</a>'
+				$("#updata_submit_div").append(updata_submit_button)
+            }
+        });
+}
+
+//得到结果需要执行的内容
+function set_updata_succeed(data){
+	var get_datas = JSON.parse(data);
+	if(get_datas.return_data == 'success'){
+                    alert('Update api success.');
+                    updata_colse_Modal();
+                    window.location.reload();
+                  }
+    else if(get_datas.return_data == 'fail'){
+    	alert('Update api Fail.不允许修改API ID 与 名称。');
+    }
+}
+
+
+//修改 api
+function updata_api_ajax(obj){
+ 	//alert(obj.id);
+	//alert("update_api_ajax");
+	post_api_ajax(obj,set_updata_succeed);
+	//var get_datas = JSON.parse(gat_updata_api_info);
+	/*
+	 if(get_datas.return_data == 'success'){
+                    alert('Update api success.');
+                    updata_colse_Modal();
+                    window.location.reload();
+                  }
+    */
+	/*
+	alert(obj.id);
+  var from_data = '#'+obj.id+'_Form';
+  alert(from_data);
+  console.log($(from_data).serialize());
+
+  $.ajax({
+            url : api_path+'/'+obj.id,//需要提交的Url地址 默认get方式 //
+            type: "POST",
+            data: $(from_data).serialize(),
+            async : true,// true 设置下，所有请求均为异步请求
+            cache : false, //设置为 false 将不会从浏览器缓存中加载请求信息。
+            //dataType: "json",
+            //错误回调函数
+            error : function(xhr) {
+                alert('请求状态： 错误:' + xhr.responseText);
+            },
+
+                 
+            success: function(data,status){
+                  alert(status);
+                  alert(data)
+                  
+            }
+        });
+	*/
+}
+
+/*
+$("#connect_db_ajax").click(function(){
+        //alert("connect_db_ajax");
+          $("#connect_db_return").empty();
+          $("#connect_db_input").hide();
+          $("#connect_db_input_wite").append(wite_time);
+            $.ajax({
+                 url: api_path+'/api_conn_db',
+                 type: "POST",
+                 data:{
+                  //方式一  在标签加入 api字段来设置默认参数传递
+                  //api_id:$('#verify_adduser_data').attr("api"),
+                  //方式二 构造默认参数
+                  host_data:$("#conn_host").val(),
+                  port_data:$("#conn_port").val(),
+                  db_name_data:$("#conn_db_name").val(),
+                  acc_data:$("#conn_db_acc").val(),
+                  password_data:$("#conn_db_password").val()
+                  //数据加密方案  js 加密 php 解密
+                  },
+                 async : true,//默认设置下，所有请求均为异步请求
+                 cache : false, //设置为 false 将不会从浏览器缓存中加载请求信息。
+                 dataType: "json",
+                 
+                 success: function(data,status){  
+                    $("#connect_db_input").show();
+                    $("#wite_img").remove();
+                  
+                    console.log(status);
+                    console.log(data);
+                    //alert(data);
+                    
+                    if(data=='db connect succeed.'){
+                      $("#connect_db_return").append('<span style="color: #7FFF00;">'+data+'</span>');
+                      $.ajax(getting);
+                    }
+                    else{
+                      $("#connect_db_return").append('<span style="color: red;">'+data+'</span>');
+                    }
+                    get_table_info();
+                 },
+                
+                  error:function(jqXHR){
+                    $("#connect_db_input").show();
+                    $("#wite_img").remove();
+                    console.log(jqXHR);
+                    alert(jqXHR);
+                  }
+            }); 
+            
+        });
+
+*/
+
+
+
+var updata_api_number = 0;
+var updata_api_dat = 0;
+
+	function updata_add_api_info(){
+		updata_api_number+=1;
+		console.log("add_api_info() updata_api_number = "+updata_api_number);
+		var set_api_info_button_id = "updata_api_info_"+updata_api_number.toString();
+		var api_info_s = '<input type="text" class="form-control" id="'+set_api_info_button_id+'" name="updata_api_info_'+updata_api_number+'" placeholder="'+set_api_info_button_id+'">'
+		var set_api_info_button = '<button type="button" class="btn btn-link" id="remove_api_info" onclick="updata_close_add_api_info('+updata_api_number+')"><h3>-</h3></button>'
+		$("button").remove("#remove_api_info");
+		$("#updata_api_info_g").append(api_info_s);
+		$("#updata_api_info_g").append(set_api_info_button);
+		
+		
+	}
+
+	function updata_close_add_api_info(e){
+		console.log("updata_close_add_api_info() updata_api_number = "+updata_api_number);
+		//alert(e)
+		$("button").remove("#remove_api_info");
+		updata_api_number-=1;
+		$("#updata_api_info_"+e.toString()).remove();
+		if(e < 2){
+			updata_api_number = 0;
+		}
+		else{
+			var set_api_info_button = '<button type="button" class="btn btn-link" id="remove_api_info" onclick="updata_close_add_api_info('+updata_api_number+')"><h3>-</h3></button>'
+			$("#updata_api_info_g").append(set_api_info_button);
+		}
+	}
+
+
+	function updata_add_api_data(){
+		updata_api_dat+=1;
+		console.log("updata_add_api_data() updata_api_dat = "+updata_api_dat);
+		var set_api_data_button_id = "updata_api_data_"+updata_api_dat.toString();
+		var api_data_s = '<input type="text" class="form-control" id="'+set_api_data_button_id+'" name="updata_api_data_'+updata_api_dat+'" placeholder="'+set_api_data_button_id+'">'
+		var set_api_data_button = '<button type="button" class="btn btn-link" id="remove_api_data" onclick="updata_close_add_api_data('+updata_api_dat+')"><h3>-</h3></button>'
+		$("button").remove("#remove_api_data");
+		$("#updata_api_data_g").append(api_data_s);
+		$("#updata_api_data_g").append(set_api_data_button);
+		
+		
+	}
+
+	function updata_close_add_api_data(e){
+		console.log("updata_close_add_api_data() updata_api_dat = "+updata_api_dat);
+		//alert(e)
+		$("button").remove("#remove_api_data");
+		updata_api_dat-=1;
+		$("#updata_api_data_"+e.toString()).remove();
+		if(e < 2){
+			updata_api_dat = 0;
+		}
+		else{
+			var set_api_data_button = '<button type="button" class="btn btn-link" id="remove_api_data" onclick="updata_close_add_api_data('+updata_api_dat+')"><h3>-</h3></button>'
+			$("#updata_api_data_g").append(set_api_data_button);
+		}
+	}
+
+
+
+	function updata_colse_Modal(){
+		$("#updata_api_info_g").empty();
+		$("#updata_api_data_g").empty();
+		$("#updata_api_Modal").hide();
+		$("#updata_api_Modal input").val("");
+		updata_api_number = 0;
+		updata_api_dat = 0;
+		/*
+  		for(add_api_input in add_api_number){
+  			$("#api_info_"+add_api_input).remove();
+  		}
+  		*/
+	}
+
+
+
+</script>
+
+</body>
+
+
+</html>

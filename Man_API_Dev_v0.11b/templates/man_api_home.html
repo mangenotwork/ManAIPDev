@@ -1,0 +1,347 @@
+{% include 'head.html' %}
+
+
+
+
+{% include 'menu_bar.html' %}
+
+<div style="width: 100%;height: 500px;">
+  
+
+<div class="row">
+
+
+    <div class="span2 bs-docs-sidebar" style="padding-top: 200px;">
+        <ul class="nav nav-tabs nav-pills nav-stacked bs-docs-sidenav affix" id="navbar-example" role="navigation">
+          <li  style="background-color: #000;"><a href="#"><span style="color: #FFF;"><i class="fa fa-coffee"></i> 开始工作</span> </a></li>
+          <li  style="background-color: #000;"><a href="#home1"><span style="color: #FFF;"><i class="fa fa-area-chart"></i> 服务器监控</a></li>
+          <li  style="background-color: #000;"><a href="#home2"><span style="color: #FFF;"><i class="fa fa-pie-chart"></i> 系统统计</a></li>
+          <li  style="background-color: #000;"><a href="#home3"><span style="color: #FFF;"><i class="fa fa-commenting"></i> 最新动态</a></li>
+          <li  style="background-color: #000;"><a href="#home4"><span style="color: #FFF;"><i class="fa fa-calendar"></i> 任务列表</a></li>
+
+        </ul>
+      </div>
+
+
+    <div class="span13" data-spy="scroll" data-target="#navbar-example">
+
+
+        <section id="home" style="padding-top: 145px;">
+
+            <div style="text-align:center;">
+            	<h2>开始工作</h2>
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <div class="row-fluid">
+                <div class="container" style="width: 80%;">
+
+                	<div class="span4">
+                		<a href="/code" class="accordion-toggle" data-toggle="tooltip" data-placement="top" title="提&nbsp;取&nbsp;代&nbsp;码.">
+                			<img src="/static/img/button1.png" width="90%" height="90%">
+                		</a>
+                	</div>
+                	<div class="span4">
+                		<a href="/code" class="accordion-toggle" data-toggle="tooltip" data-placement="top" title="提&nbsp;交&nbsp;代&nbsp;码.">
+                		<img src="/static/img/button2.png" width="90%" height="90%">
+                		</a>
+                	</div>
+                	<div class="span4">
+                		<a data-toggle="modal" href="#creation_project_Modal" class="accordion-toggle" data-toggle="tooltip" data-placement="top" title="创&nbsp;建&nbsp;项&nbsp;目." onclick="get_user_nowe();">
+                		<img src="/static/img/button3.png" width="90%" height="90%">
+                		</a>
+                	</div>
+                </div>
+            </div>
+
+        </section>
+        <br>
+        <br>
+        <hr>
+
+        <section id="home1" style="padding-top: 145px;">
+             <div style="text-align:center;">
+                    <h2>服务器性能监控</h2>
+                </div>
+
+                <br>
+                <br>
+            <div class="container" style="width: 80%;">
+                    <div id="server_info" style="width: 80%;height:280px;">
+                    	    
+                    </div>
+                    <div>
+                        <ul class="pager">
+                            <li><a href="#">查看 1/天</a></li>
+                            <li><a href="#">查看 1/小时</a></li>
+                        </ul>
+                    </div>
+            </div>
+        </section>
+
+        <br>
+        <hr>
+
+
+
+    <section id="home2" style="padding-top: 145px;">
+
+        <div style="text-align:center;">
+                <h2>系统统计</h2>
+            </div>
+            <br>
+            <br>
+            <br>
+
+        <div class="row-fluid">
+        <div class="container" style="width: 90%;">
+        	<div class="span12">
+    	    	<div class="span6">
+    	    			<div class="state-overview">
+                            <div class="span6">
+                                <div class="panel purple">
+                                    <div class="symbol">
+                                        <i class="fa fa-server"></i>
+                                    </div>
+                                    <div class="state-value">
+                                    
+                                        <div class="value">{{all_project_number}}个</div>
+                                        <div class="title">项目总数</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span6">
+                                <div class="panel red">
+                                    <div class="symbol">
+                                        <i class="fa fa-sitemap"></i>
+                                    </div>
+                                    <div class="state-value">
+                                        <div class="value">30个接口</div>
+                                        <div class="title">API总数</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    	    	</div>
+    	    	<div class="span6">
+    	    			<div class="state-overview">
+                            <div class="span6">
+                                <div class="panel blue">
+                                    <div class="symbol">
+                                        <i class="fa fa-user-secret"></i>
+                                    </div>
+                                    <div class="state-value">
+                                        <div class="value">{{all_user_number}}人</div>
+                                        <div class="title">团队人数</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span6">
+                                <div class="panel green">
+                                    <div class="symbol">
+                                        <i class="fa fa-file-code-o"></i>
+                                    </div>
+                                    <div class="state-value">
+                                        <div class="value">390次</div>
+                                        <div class="title">代码提交总次数</div>
+                                    </div>
+                                </div>
+                        	</div>
+                        </div>
+    	    	</div>
+        	</div>
+        	</div>
+        </div>
+    </section>
+
+
+    <br>
+    <br>
+    <hr>
+    <br>
+                    <!--介绍 end-->
+
+
+
+                    <div class="page-heading">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">Man API Dev Platform v0.1_demo</a>
+                </li>
+                <li class="active"> Python Web App 微架构API开发平台 </li>
+                <li> 2019 © Man API Dev by 雇佣工软件工作室 </li>
+            </ul>
+        </div>
+
+</div>
+
+
+
+    </div>
+
+
+
+</div>
+
+
+
+
+
+
+<!--创建项目  creation_project_Modal -->
+<div class="modal fade" id="creation_project_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="colse_creation_projectModal()">×
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    创建项目
+                </h4>
+            </div>
+            <div class="modal-body">
+
+            <form  id="creation_project_Form" name="creation_project_Form">
+
+  <span>创建者 ： <input class="input-xlarge" type="text" id="c_user_name" name="c_user_name" readonly="readonly"></span><hr>
+  <span>项目名 ： <input type="text" id="project_names" name="project_names"></span><hr>
+  <span>项目权限 ： <select class="form-control" id="project_acc" name="project_acc">
+      <option value="1">公开</option>
+      <option value="0">私有</option>
+      <option value="2">保密</option>
+    </select></span>
+  </form>
+  
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" 
+                        data-dismiss="modal" onclick="colse_creation_projectModal();">关闭
+                </button>
+                <a type="button" class="btn btn-primary" onclick="creation_project_togo();">
+                    提交并连接
+                </a>
+            </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+
+    function get_user_nowe(){
+        //alert($("#user_name").text());
+        //alert($("#user_name").text().split('"')[1]);
+        $("#c_user_name").val("");
+        $("#c_user_name").val($("#user_name").text().split('"')[1]);
+    }
+    
+    function creation_project_togo_return(datas){
+        //alert(datas);
+        var return_infos = JSON.parse(datas);
+        //alert(return_infos);
+        if(return_infos == "succees"){
+            alert("创建成功！");
+            //location.reload();
+            window.location.href="/code";
+        }
+        else if(return_infos == 0){
+            alert("请输入项目名称！");
+            //location.reload();
+        }
+        else{
+            //alert("程序错误！");
+            alert(return_infos);
+        }
+    }
+
+    function creation_project_togo(){
+        post_api_ajax3("creation_project_Form","creatproject_init",creation_project_togo_return);
+    }
+
+</script>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('server_info'));
+
+        // 指定图表的配置项和数据
+        var option = {
+    title: {
+        text: '服务器性能'
+    },
+    tooltip : {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'cross',
+            label: {
+                backgroundColor: '#6a7985'
+            }
+        }
+    },
+    legend: {
+        data:['CPU','内存','磁盘']
+    },
+    toolbox: {
+        feature: {
+            dataView: {readOnly: false},
+            restore: {},
+            saveAsImage: {}
+        }
+    },
+    grid: {
+        left: '10%',
+        right: '5%',
+        bottom: '10%',
+        containLabel: true
+    },
+    xAxis : [
+        {
+            type : 'category',
+            boundaryGap : false,
+            data : ['19:00','20:00','21:00','22:00','23:00','24:00','01:00','02:00','03:00']
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value',
+            max:100,
+            min: 0,
+            minInterval: 1,
+            axisLabel: {
+            formatter: '{value} %'
+        },
+            offset: 10
+        }
+    ],
+    series : [
+        {
+            name:'CPU',
+            type:'line',
+            data:[20, 21, 20, 23, 25, 27, 22, 27, 22]
+        },
+        {
+            name:'内存',
+            type:'line',
+            
+            data:[70, 70, 71, 72, 73, 74, 72, 74, 72]
+        },
+       
+        {
+            name:'磁盘',
+            type:'line',
+            
+            
+            data:[90, 91, 93, 93, 91, 92, 91, 92, 91]
+        }
+    ]
+};
+
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,609 @@
+{% include 'head.html' %}
+
+<script src="{{ url_for('static', filename='webuploader-0.1.5/webuploader.js') }}" rel="stylesheet"></script>
+<link href="{{ url_for('static', filename='webuploader-0.1.5/webuploader.css') }}" rel="stylesheet">
+
+
+{% include 'menu_bar.html' %}
+
+
+
+<div style="width: 100%;height: 500px;padding-top: 110px;">
+<br>
+<br>
+
+<div class="container-fluid">
+
+<div class="row-fluid">
+		<div class="span2">
+			<span class="nav-header" style="background-color: #000;"><h3 style="color: #fff;"> <i class="fa fa-tasks"></i> Project</h3></span>
+		      	<ul class="nav nav-tabs nav-pills nav-stacked"  style="background-color: #E0FFFF;">
+				  <li class="active"><a href="#">项目列表</a></li>
+				  <li><a href="#">素材</a></li>
+				  <li><a href="#">社区</a></li>
+				  <li><a href="#">常见算法</a></li>
+				  <li><a href="#">问答专区</a></li>
+				</ul>
+	</div>
+
+	<div class="span10" style="border:1px solid #000;">
+		<div id="project_button_div">
+	      		
+	      		<ul class="breadcrumb" style="margin: 0 0 -20px 0">
+	      				<li>
+					    	<button class="btn btn-block btn-default" type="button" data-toggle="modal" href="#create_Modal" onclick="get_group();">
+                            <i class="fa fa-plus"></i> 创建项目
+                        </button>
+					    </li>
+	      				<li>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-file-code-o"></i> {{project_number}} 个项目&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        
+					    </li>
+
+					    
+					    <li>
+					    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;查找: <input type="text" class="form-control" aria-controls="dynamic-table">
+					    </li>
+					    
+					    
+					</ul>
+
+					<hr style="background-color: #000;height: 2px;">
+
+	  		</div>
+	  	<div style="height: 500px;overflow:auto;">
+
+		{% for flask_name in flask_list_names %}
+		<div class="container" style="width: 98%;">
+			{% if flask_name[1] in "Master" %}
+				<div class="panel panel-info">
+			{% else %}
+				<div class="panel panel-warning">
+			{% endif %}
+		
+		    <div class="panel-heading">
+		    	 <span style="font-size: 18px;float:left;">项目名称：</span>
+		    	 <span style="font-size: 18px;width: 100px;float:left;" title="{{flask_name[0]}}" id="{{flask_name[0]}}_name">{{flask_name[0]}}
+		    	 
+		    	 </span>
+		    	 <span class="label">私有</span>
+		    	 {% if flask_name[1] in "Master" %}
+		    	 	<span class="label label-info">迭代中...</span>
+		    	 {% else %}
+		    	 	<span class="label label-important">开发中...</span>
+		    	 {% endif %}
+		    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		    	 <span>
+
+			        <select class="btn btn-inverse" style="width: 125px;" id="{{flask_name[0]}}_branch">
+			        	<!--<span style="font-size: 18px;"><i class="fa fa-bars"></i></span>&nbsp;<span style="font-size: 18px;" >{{flask_name[1]}}</span>-->
+			        	
+			          <option value="Master">主目录</option>
+				      <option value="Branch">开发分子</option>
+				      <option value="Release">发布版本</option>
+				      <option value="Historyimage">历史迭代</option>
+				      <option value="Backup">备份目录</option>
+				      </select>
+		        </span>
+		    
+		    <span id="{{flask_name[0]}}_open">
+		        <button class="btn " id="{{flask_name[0]}}_button" name="{{flask_name[0]}}_open" onclick="open_all_show(this);">
+		        	<i class="fa fa-chevron-down"></i> 打开目录
+		        </button>
+		        </span>
+		    <span class="tools pull-right">
+		    	<a class="fa fa-sliders accordion-toggle" id="{{flask_name[0]}}_manage" onclick="open_managebranch(this);"> 分支管理</a>
+		    	<a class="fa fa-cloud-download"> 提取</a>
+		    	<a class="fa fa-upload" data-toggle="modal" href="#upload_Modal" id="{{flask_name[0]}}_updata" onclick="set_path_datas(this);"> 上传</a>
+		    	<a class="fa fa-copy" href="javascript:;"> 备份</a>
+		    	<a class="fa fa-calendar-o" href="javascript:;"> 日志</a>
+		    	
+		    	
+		    </span>
+		    </div>
+		    <div class="panel-body" id="{{flask_name[0]}}_all_show" style="display:none;background-color: #FFFFFF;">
+		        <div id="{{flask_name[0]}}_level_0" class="tree tree-solid-line">
+		        </div>
+		    </div>
+		</div>
+		</div>
+		 <hr>
+	                    {% endfor %}
+
+	</div>
+	         
+	
+	           
+
+
+
+	           <div class="pagination" style="text-align:center;">
+                        	<ul id="pg_show">
+
+                        		{% if now_pg-1 > 0 %}
+                        			<li ><a href="/code?pgnumber={{ now_pg-1 }}">← 上一页</a></li>
+                        		{% else %}
+                        			<li class="prev disabled"><a>← 上一页</a></li>
+                        		{% endif %}
+
+                        		{% for numpg in all_pg %}
+                        			{% if numpg[1]%}
+							    	 	<li class="active"><a href="/code?pgnumber={{numpg[0]}}">{{numpg[0]}}</a></li>
+							    	 {% else %}
+							    	 	<li><a href="/code?pgnumber={{numpg[0]}}">{{numpg[0]}}</a></li>
+							    	 {% endif %}
+
+                        			
+                        		{% endfor %}
+                        		<!--
+                        		<li class="active"><a href="#">1</a></li>
+                        		<li><a href="#">2</a></li>
+                        		<li><a href="#">3</a></li>
+                        		<li><a href="#">4</a></li>
+                        		<li><a href="#">5</a></li>
+								-->
+								{% if now_pg < maxpg %}
+                        			<li class="next"><a href="/code?pgnumber={{ now_pg+1 }}">下一页 → </a></li>
+                        		{% else %}
+                        			<li class="next disabled"><a>下一页 → </a></li>
+                        		{% endif %}
+                        		
+                        	</ul>
+                        </div>        
+    </div>        
+</div>
+  
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!--删除和禁用用户  upload_Modal -->
+<div class="modal fade" id="upload_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					上传文件
+				</h4>
+			</div>
+			<div class="modal-body">
+<!--
+			<form  id="upload_Form" name="upload_Form">
+
+
+
+
+  </form>
+ -->
+<pre>
+  项目名称 : <input class="input-xlarge" type="text" id="project_name" name="project_name" readonly="readonly">
+  <!--分支 : <input class="input-xlarge" type="text" id="branch_name" name="branch_name" readonly="readonly">-->
+  操作人 : <input class="input-xlarge" type="text" id="user_handle_name" name="user_handle_name" readonly="readonly">
+</pre>
+<div id="uploader" class="wu-example">
+    <!--用来存放文件信息-->
+    <div id="fileList" class="uploader-list"></div>
+    <div class="btns">
+        <div id="picker">选择文件</div>
+        <button id="btnClick" class="btn btn-default">开始上传</button>
+        <!--<button id="refilebtn" class="btn btn-default" >重选</button>-->
+    </div>
+</div>
+
+			</div>
+			
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" 
+						data-dismiss="modal" onclick="re_files();">关闭
+				</button>
+			</div>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+
+			
+
+			function set_path_datas(obj){
+				//alert(obj.id);
+				get_acc_doing(get_name(obj.id));
+
+				$("#project_name").val("");
+				//$("#branch_name").val("");
+				$("#user_handle_name").val("");
+				$("#project_name").val(get_name(obj.id));
+				//alert($("#"+get_name(obj.id)+"_branch").text());
+				//$("#branch_name").val($("#"+get_name(obj.id)+"_branch").text());
+				$("#user_handle_name").val($("#user_name").text().split('"')[1]);
+				//获取当前分支的版本
+				
+
+				$("#fileList").empty();
+				$("#picker").empty();
+				$("#picker").append("请点击此处选择你要上传的压缩文件!");
+
+			$(function(){
+
+				var uploader = WebUploader.create({
+
+			    // swf文件路径
+			    swf: './static/webuploader-0.1.5/Uploader.swf',
+
+			    // 文件接收服务端。
+			    server: 'http://127.0.0.1:9888/uploadfile',
+
+			    // [默认值：'file']  设置文件上传域的name。
+                fileVal:'uploadfilename',
+                formData: {"project_name": $("#project_name").val(),
+            			   //"branch_name": $("#branch_name").val(),
+            			   "user_handle_name": $("#user_handle_name").val()},
+			    // 选择文件的按钮。可选。
+			    // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+			    pick:{
+			    	id: '#picker',
+			    	multiple:false
+			    },// '#picker',
+			    accept: {// 只允许选择图片文件格式
+		            extensions: 'rar,zip,7z,tar.gz',
+		            mimeTypes: '.rar,.zip,.7z,.tar.gz'
+		        },
+			    fileNumLimit: 1,
+			    // 上传并发数。允许同时最大上传进程数[默认值：3]   即上传文件数
+			    threads: 1,
+			    // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+			    resize: false
+			    // 自动上传修改为手动上传
+                //auto: true,
+                //是否要分片处理大文件上传。
+                //chunked: true,
+                // 如果要分片，分多大一片？ 默认大小为5M.
+                //chunkSize: 5 * 1024 * 1024,
+                // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+                //resize: false
+			});
+
+				// 当有文件被添加进队列的时候
+				uploader.on( 'fileQueued', function( file ) {
+					var $list = $("#fileList");
+				    $list.append( '<div id="' + file.id + '" class="item">' +
+				        '<h4 class="info">' + file.name + '</h4>' +
+				        '<p class="state">等待上传...</p>' +
+				    '</div>' );
+				});
+
+
+
+				// 文件上传过程中创建进度条实时显示。
+				uploader.on( 'uploadProgress', function( file, percentage ) {
+				    var $li = $( '#'+file.id ),
+				        $percent = $li.find('.progress .progress-bar');
+
+				    // 避免重复创建
+				    if ( !$percent.length ) {
+				        $percent = $('<div class="progress progress-striped active">' +
+				          '<div class="progress-bar" role="progressbar" style="width: 0%">' +
+				          '</div>' +
+				        '</div>').appendTo( $li ).find('.progress-bar');
+				    }
+
+				    $li.find('p.state').text('上传中');
+
+				    $percent.css( 'width', percentage * 100 + '%' );
+				});
+
+
+
+				uploader.on( 'uploadSuccess', function( file, response) {
+				    //$( '#'+file.id ).find('p.state').text('已上传');
+				    alert("上传成功");
+				    alert(response);
+				    location.reload();
+				});
+
+				uploader.on( 'uploadError', function( file ) {
+				    $( '#'+file.id ).find('p.state').text('上传出错');
+				    alert("上传失败");
+				    location.reload();
+				});
+
+				uploader.on( 'uploadComplete', function( file ) {
+				    $( '#'+file.id ).find('.progress').fadeOut();
+				    $( '#'+file.id ).find('.progress').remove();
+
+				});
+
+
+				//点击上传按钮触发事件
+                $("#btnClick").click(function(){
+                    uploader.upload();
+                });
+
+
+
+
+				 });
+			}
+
+			function re_files(){
+				//$("#upload_Modal").hide();
+				//$("#upload_Modal").show();
+				//$("#fileList").empty();
+				//$("#picker").empty();
+				//$("#picker").append("请点击此处选择你要上传的压缩文件!");
+				
+				//var file = $("#picker input");  
+			    //file.remove();  
+			    location.reload();
+			    
+			}
+
+</script>
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+//检查操作权限
+			function user_acc_verify(datas){
+				//alert(datas);
+				if(datas != '1'){
+					alert("你没有该项目的操作权限");
+					location.reload();
+				}
+				
+				
+			}
+
+			function get_acc_doing(project){
+				// get 获取项目的第一级目录与文件
+				var url_strings = 'get_acc_doing?user='+$("#user_name").text().split('"')[1]+'&project='+project;
+				//alert(url_strings);
+				get_api_ajax2(url_strings,user_acc_verify);
+			}
+
+
+
+
+	function get_name(string_datas){
+	var names = string_datas.split('_');
+  	names.splice(names.length-1,names.length);
+  	name = names.join('_');
+  	return name;
+}	
+
+	function set_dir_dats_path_name(string_datas){
+		var names = string_datas.split('_');
+		name = names.join('$');
+		return name;
+	}
+
+	function set_dir_div_pata_id(string_datas){
+		var names = string_datas.split('/');
+		name = names.join('_');
+		return name;
+	}
+
+	function get_folder_name(obj){
+		alert(obj.id);
+		console.log(obj);
+		console.log(obj.id);
+	}
+
+
+
+	// 第一层 目录样式
+	function tree_folder_show_1(descend_datas,path_number,datas){
+		// 目录样式
+		var tree_folder_show = '<div class="tree-folder">\
+								<div class="tree-folder-header"  id="'+descend_datas+'_'+datas+'"\
+								style="display:block;" onclick="open_folder_show(this);" >\
+                                        <span id="'+descend_datas+'_'+datas+'_i"><i class="fa fa-folder"></i></span>\
+                                        <div class="tree-folder-name">'+datas+'\
+                                        <div class="tree-actions">\
+                                        \
+                                        </div></div>\
+                                    </div><div class="tree-folder-content"\
+                                     id="'+descend_datas+'_'+datas+'_level_'+(path_number+1)+'"></div>\
+                                    <div class="tree-loader" style="display: block;">\
+                                    </div>\
+            </div>';
+        return tree_folder_show;
+	}
+
+	// 第一层 文件样式
+	function tree_file_show_1(datas){
+		// 目录样式
+		var tree_file_show = '<div class="tree-folder" style="display: block;">\
+                                    <div class="tree-folder-header">\
+                                        <i class="fa fa-file-code-o"></i>\
+                                        <div class="tree-folder-name">'+datas+'<div class="tree-actions">\
+										\
+                                        <i class="fa fa-eye"></i>\
+                                        </div></div>\
+                                        </div></div>\
+                                    </div>\
+                                    <div class="tree-folder-content"></div>\
+                                </div>';
+        return tree_file_show;
+	}
+
+	function dir_1_show(datas){
+
+
+		//alert(datas);
+		var get_datas = JSON.parse(datas);
+		//alert(get_datas.dirlist);
+		//alert(get_datas.filelist);
+		//alert(get_datas.dirname);
+
+		console.log(get_datas.dirlist);
+		console.log(get_datas.filelist);
+		console.log("[Dir name] = "+get_datas.dirname);
+		console.log(get_datas.dirpathnumber);
+		//alert(get_datas.dirlist);
+		
+
+		var dir_name_val = set_dir_div_pata_id(get_datas.dirname);
+
+		var set_dir_level = '#'+dir_name_val+'_level_'+get_datas.dirpathnumber;
+		console.log("ID add = "+set_dir_level);
+		$(set_dir_level).empty();
+
+		if(get_datas.dirlist == ""){
+			//alert("空");
+			$(set_dir_level).append("<h4>空</h4>")
+		}
+
+		for(var dir_show_div in get_datas.dirlist){
+			console.log(get_datas.dirlist[dir_show_div]);
+			//添加目录样式
+			$(set_dir_level).append(tree_folder_show_1(dir_name_val,
+														 get_datas.dirpathnumber,
+														 get_datas.dirlist[dir_show_div]));
+		}
+		for(var file_show_div in get_datas.filelist){
+			console.log(get_datas.filelist[file_show_div]);
+			$(set_dir_level).append(tree_file_show_1(get_datas.filelist[file_show_div]));
+		}
+
+	}
+
+	function open_all_show(obj){
+
+		var open_project_names = get_name(obj.name);
+		//alert(open_project_names);
+		//alert(get_name(obj.id));
+		var now_project_name = get_name(obj.id);
+		//项目名称
+		//alert(get_name(obj.id));
+		//当前分支
+		//alert($("#"+get_name(obj.id)+"_branch").text());
+		var now_project_branch = $("#"+get_name(obj.id)+"_branch").val();
+		//alert(now_project_branch);
+		var up_show = '<button class="btn" id="'+obj.id+'" name="'+open_project_names+'_up" onclick="open_all_show_up(this);">\
+						<i class="fa fa-chevron-up"></i> 关闭目录</button>';
+		var all_show_psoi = "#"+open_project_names+"_all_show";
+		var open_psoi = "#"+open_project_names+"_open";
+		//alert(all_show_psoi);
+		//alert(open_psoi);
+		$(all_show_psoi).show();
+		$(open_psoi).empty();
+		$(open_psoi).append(up_show);
+
+		// get 获取项目的第一级目录与文件
+		var url_strings = 'get_dir?project_names='+now_project_name+"&branch="+now_project_branch+"&open_project="+open_project_names;
+		//alert(url_strings);
+		get_api_ajax2(url_strings,dir_1_show);
+		
+	}
+
+/*
+	function open_all_show_child(obj){
+		var open_project_names = get_name(obj.name);
+		//alert(open_project_names);
+		alert(get_name(obj.id));
+		var now_project_name = get_name(obj.id);
+		//项目名称
+		alert(get_name(obj.id));
+		//当前分支
+		alert($("#"+get_name(obj.id)+"_branch").text());
+		var now_project_branch = $("#"+get_name(obj.id)+"_branch").text();
+	}
+*/
+
+
+	function open_all_show_up(obj){
+
+		var up_project_names = get_name(obj.name);
+		//alert(up_project_names);
+		var down_show = '<button class="btn" id="'+obj.id+'" name="'+up_project_names+'_up" onclick="open_all_show(this);">\
+						<i class="fa fa-chevron-down"></i> 打开目录</button>'
+		
+		$("#"+up_project_names+"_all_show").hide();
+		$("#"+up_project_names+"_open").empty();
+		$("#"+up_project_names+"_open").append(down_show);
+		
+		
+	}
+
+	function dir_2_show(datas){
+		//alert(datas);
+		var get_datas = JSON.parse(datas);
+		console.log(get_datas.dirlist);
+		console.log(get_datas.filelist);
+		console.log(get_datas.dirname);
+		console.log(get_datas.dirpathnumber);
+		//alert(set_dir_div_pata_id(get_datas.dirname));
+
+			var set_dir_level = '#'+set_dir_div_pata_id(get_datas.dirname)+'_level_'+get_datas.dirpathnumber;
+			//$(set_dir_level).empty();
+			alert(set_dir_level);
+
+		
+	}
+
+	// 点击目录显示内容
+	function open_folder_show(obj){
+		//alert(obj.id);
+
+		var i_show_img = '#'+obj.id+'_i';
+		//alert(i_show_img);
+		$(i_show_img).empty();
+		$(i_show_img).append('<i class="fa fa-folder-open"></i>');
+
+		//处理传入的数据
+		//alert(set_dir_dats_path_name(obj.id));
+
+		var string_datas = obj.id;
+		var names = string_datas.split('_');
+		//alert(names[0]);
+		var now_project_name = names[0];
+
+		var now_project_branch = $("#"+names[0]+"_branch").val();
+
+		var url_strings = 'get_dir?project_names='+now_project_name+"&branch="+now_project_branch+"&open_project="+set_dir_dats_path_name(obj.id);
+
+		// get 获取项目的第一级目录与文件
+		//var url_strings = 'get_dir/'+set_dir_dats_path_name(obj.id);
+		//alert(url_strings);
+		get_api_ajax2(url_strings,dir_1_show);
+	}
+
+
+
+function upload_file(){
+	var formData = new FormData();
+    formData.append("file_name",$("#file_name")[0].files[0]);
+    formData.append("service",'App.Passion.UploadFile');
+    //formData.append("token",token);
+    alert(formData.file_name);
+}
+
+// 打开分支管理
+function open_managebranch(obj){
+	//alert(get_name(obj.id));
+	get_acc_doing(get_name(obj.id));
+	window.location.href='/managebranch/'+get_name(obj.id);
+}
+
+
+</script>
+
+
+
+
+</html>

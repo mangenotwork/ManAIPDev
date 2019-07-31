@@ -1,0 +1,227 @@
+{% include 'head.html' %}
+
+
+{% include 'menu_bar.html' %}
+
+
+
+<div style="width: 100%;height: 500px;padding-top: 110px;">
+<br>
+<br>
+
+<div class="container-fluid">
+
+	<div class="row-fluid">
+		<div class="span2">
+			<span class="nav-header" style="background-color: #000;"><h3 style="color: #fff;"><i class="fa fa-sitemap"></i> API </h3></span>
+		      	<ul class="nav nav-tabs nav-pills nav-stacked"  style="background-color: #E0FFFF;">
+				  <li class="active"><a href="#">我的 API</a></li>
+				  <li><a href="#">管理 API</a></li>
+				  <li><a href="#">公用 API</a></li>
+				  <li><a href="#">Man API</a></li>
+				</ul>
+		</div>
+	
+
+		<div class="span10" style="border:1px solid #000;height: 650px;">
+			<div id="project_button_div">
+		      		
+		      		<ul class="breadcrumb" style="margin: 0 0 -20px 0">
+		      				<li>
+	                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-file-code-o"></i> 20 个API&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	                        
+						    </li>
+						    <li>
+	                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-file-code-o"></i> 3 个API分类&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	                        
+						    </li>
+		      				<li>
+						    	<button class="btn btn-block btn-default" type="button" data-toggle="modal" href="#create_Modal" onclick="get_group();">
+	                            <i class="fa fa-plus"></i> 创建 API 分类
+	                        </button>
+						    </li>
+		      				
+						    
+						    
+						</ul>
+
+						<hr style="background-color: #000;height: 2px;">
+
+		  		</div>
+		  	<div style="margin: -20px 0 -10px 0;">
+		  		 <div class="row-fluid">
+		          <div class="span2" style="height: 590px;overflow:scroll;">
+		          		<ul class="nav nav-tabs nav-pills nav-stacked"  style="background-color: #FCFCFC;">
+						  <li ><a style="color: #000;" href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <!--
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+						  <li><a href="#">11111</a></li>
+							-->
+						</ul>
+		          </div>
+
+		          <div style="height: 560px;margin: 0px 0px 0px 10px;overflow:auto;">
+
+
+		          				<br>
+
+							  <div class="accordion-group" >
+							    <div class="accordion-heading" style="background-color: #C1FFE4; height: 40px;">
+
+							      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#test1" >
+
+							        	<span class="label label-success" style="font-size: 21px;">GET</span>
+							        	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							        <span style="font-size: 21px;"> /aaa</span>
+
+							      </a>
+							      <span class="tools pull-right" style="margin: -35px 10px 0px 0px;">
+								    	<a class="fa fa-cloud-download"> 分组</a>
+								    	<a class="fa fa-upload" data-toggle="modal" href="#upload_Modal" > 修改</a>
+								    	<a class="fa fa-hand-paper-o" href="javascript:;"> 删除</a>
+								    	<a class="fa fa-refresh" href="javascript:;"> 刷新</a>
+								    	
+								    	
+								    </span>
+
+							  		</div>
+
+							    <div class="accordion-body collapse" id="test1">
+							      <div class="accordion-inner">
+							        <table class="table">
+										<!-- 	/api_test 	-->
+								    	<tr  class="success">
+									      <td width="10%;"><b>[接口名称]:</b> <p> 11</p> </td>
+									      <td width="10%;"><b>[描述]:</b><p> 11</p></td>
+									      <td width="20%;">
+									        <ul>
+									        	<b>[说明]:</b>
+
+									            	<li>11</li>
+
+									        </ul>
+									      </td>
+									      <td width="25%;">
+									      	<b>[执行方法]:</b>
+									      
+									      	 <pre style="width: 80%;">     		
+
+					    data_info : <input type="text" class="form-control">,
+			      	 </pre>
+
+												<a >aaa</a>
+									      </td>
+									      <td width="25%;">
+									      	<b>[返回值]:</b>
+									        <pre style="width: 80%;"></pre>
+									      </td>
+									    </tr>
+					    			</table>
+							      </div>
+							    </div>
+							  	</div>
+
+
+
+							  	
+
+
+							  <div class="accordion-group" >
+							    <div class="accordion-heading" style="background-color: #C1FFE4; height: 40px;">
+
+							      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#test2" >
+
+							        	<span class="label label-success" style="font-size: 21px;">GET</span>
+							        	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							        <span style="font-size: 21px;"> /aaa</span>
+
+							      </a>
+							      <span class="tools pull-right" style="margin: -35px 10px 0px 0px;">
+								    	<a class="fa fa-cloud-download"> 分组</a>
+								    	<a class="fa fa-upload" data-toggle="modal" href="#upload_Modal" > 修改</a>
+								    	<a class="fa fa-hand-paper-o" href="javascript:;"> 删除</a>
+								    	<a class="fa fa-refresh" href="javascript:;"> 刷新</a>
+								    	
+								    	
+								    </span>
+
+							  		</div>
+
+							    <div class="accordion-body collapse" id="test2">
+							      <div class="accordion-inner">
+							        <table class="table">
+										<!-- 	/api_test 	-->
+								    	<tr  class="success">
+									      <td width="10%;"><b>[接口名称]:</b> <p> 11</p> </td>
+									      <td width="10%;"><b>[描述]:</b><p> 11</p></td>
+									      <td width="20%;">
+									        <ul>
+									        	<b>[说明]:</b>
+
+									            	<li>11</li>
+
+									        </ul>
+									      </td>
+									      <td width="25%;">
+									      	<b>[执行方法]:</b>
+									      
+									      	 <pre style="width: 80%;">     		
+
+					    data_info : <input type="text" class="form-control">,
+			      	 </pre>
+
+												<a >aaa</a>
+									      </td>
+									      <td width="25%;">
+									      	<b>[返回值]:</b>
+									        <pre style="width: 80%;"></pre>
+									      </td>
+									    </tr>
+					    			</table>
+							      </div>
+							    </div>
+							  	</div>
+
+
+
+
+
+					</div>
+
+		          </div>
+		        </div>
+		  	</div>
+		</div>
+
+
+	</div>
+</div>
+
+
+</body>
+<html>

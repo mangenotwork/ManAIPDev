@@ -1,0 +1,47 @@
+<div class="span2">
+	    	<span class="nav-header" style="background-color: #000;"><h3 style="color: #fff;">管理</h3></span>
+	      	<ul class="nav nav-tabs nav-pills nav-stacked" id="set_nav_manage_datas"  style="background-color: #E0FFFF;">
+			</ul>
+	    </div>
+	    <script type="text/javascript">
+	  	　function GetUrlRelativePath()
+　　{
+　　　　var url = document.location.toString();
+　　　　var arrUrl = url.split("//");
+
+　　　　var start = arrUrl[1].indexOf("/");
+　　　　var relUrl = arrUrl[1].substring(start);//stop省略，截取从start开始到结尾的所有字符
+
+　　　　if(relUrl.indexOf("?") != -1){
+　　　　　　relUrl = relUrl.split("?")[0];
+　　　　}
+　　　　return relUrl;
+　　}
+	
+	function set_nav_manage(){
+		//alert("a");
+		var nav_manage_li = [["/usermanage","用户管理"],
+							 ["/man_api_manage","flask管理"],
+							 ["/man_dg_manage","部门&组管理"],
+							 ["","设置"],
+							 ["","容器管理"],
+							 ["","系统管理"],
+							 ["","插件"],
+							 ["","License"]
+							];
+							//$("#set_nav_manage_datas").append("aa");
+		for(var nav_data in nav_manage_li){
+			console.log(nav_manage_li[nav_data][1]);
+			if(nav_manage_li[nav_data][0] == GetUrlRelativePath() ){
+				$("#set_nav_manage_datas").append('<li  class="active"><a href="'+nav_manage_li[nav_data][0]+'">'+nav_manage_li[nav_data][1]+'</a></li>');
+			}else{
+			$("#set_nav_manage_datas").append('<li><a href="'+nav_manage_li[nav_data][0]+'">'+nav_manage_li[nav_data][1]+'</a></li>');
+			//$("#set_nav_manage_datas").append("aa");
+			}
+		}
+
+	}
+
+	//alert(GetUrlRelativePath());
+	set_nav_manage();
+	  </script>

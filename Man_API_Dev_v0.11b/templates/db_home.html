@@ -1,0 +1,281 @@
+{% include 'head.html' %}
+
+
+
+{% include 'menu_bar.html' %}
+
+
+
+<div style="width: 100%;padding-top: 140px;">
+	<div>
+		<!--<h1>DB Manage V0.1</h1>-->
+	</div>
+
+	<div id="db_doing_pg">
+	</div>
+	<div id="db_doing_main">
+
+		<div class="container-fluid">
+			  <div class="row-fluid">
+			    <div class="span2">
+			      <ul class="nav nav-tabs nav-stacked" id="table_all_list">
+
+						<li class="active">
+							<h4> DataBases : < habl >  </h4>
+						</li>   
+						
+					</ul>
+			    </div>
+			    <div class="span10">
+			      
+			    		<div id="table_info" style="border:1px solid #000;">
+					
+					
+					
+					<ul class="breadcrumb">
+					    <li><a href="#"><button>查看所有数据</button></a></li>
+					    <li><a href="#"><button>结构</button></a></li>
+					    <li><a href="#"><button>查询</button></a></li>
+					    <li><a href="#"><button>导出</button></a></li>
+					    <li><a href="#"><button>操作</button></a></li>
+					    <li><a href="#"><button>Input Sql</button></a></li>
+					    
+					</ul>
+					<hr size="20xp">
+					<h4>表名</h4>
+					<div class="table-responsive" style="width: 99%;overflow:scroll;float: right;">
+
+					  <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="tb_width">产品</th>
+      <th class="tb_width">付款日期</th>
+      <th class="tb_width">状态</th>
+      <th class="tb_width">产品</th>
+      <th class="tb_width">付款日期</th>
+      <th class="tb_width">状态</th>
+      <th class="tb_width">产品</th>
+      <th class="tb_width">付款日期</th>
+      <th class="tb_width">状态</th>
+      <th class="tb_width">产品</th>
+      <th class="tb_width">付款日期</th>
+      <th class="tb_width">状态</th>
+      <th class="tb_width">产品</th>
+      <th class="tb_width">付款日期</th>
+      <th class="tb_width">状态</th>
+      <th class="tb_width">产品</th>
+      <th class="tb_width">付款日期</th>
+      <th class="tb_width">状态</th>
+      <th class="tb_width">产品</th>
+      <th class="tb_width">付款日期</th>
+      <th class="tb_width">状态</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr class="active">
+      <td class="tb_width">1</td>
+      <td class="tb_width">11</td>
+      <td class="tb_width">11</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+  </tr>
+    <tr class="success">
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+    <tr class="warning">
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+    <tr class="danger">
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+      <td class="tb_width">10/11/2013产品2</td>
+  </tbody>
+</table>
+					</div>
+
+					<div class="pagination">
+					  <ul>
+					    <li><a href="#">Prev</a></li>
+					    <li><a href="#">1</a></li>
+					    <li><a href="#">2</a></li>
+					    <li><a href="#">3</a></li>
+					    <li><a href="#">4</a></li>
+					    <li><a href="#">5</a></li>
+					    <li><a href="#">Next</a></li>
+					  </ul>
+					</div>
+
+					<br>
+
+		</div>
+
+
+
+			    </div>
+			  </div>
+			</div>
+		
+		<!--	
+		<div class="container" style="float:left;width: 20%">
+			<div class="row">
+				<div class="span3">
+					<ul class="nav nav-tabs nav-stacked">
+
+						<li class="active">
+							<h4> DataBases : < habl >  </h4></li>   
+						<li><a href="#">[Table]: Tutorials</a></li>
+						<li><a href="#">[Table]: Practice Editor </a></li> 
+						<li><a href="#">[Table]: Gallery</a></li> 
+						<li><a href="#">[Table]: Contact</a></li> 
+					</ul>
+				</div>
+			</div>
+		</div>
+
+
+		
+
+		<div id="table_info" style="float:right;width: 79%;border:1px solid #000";>
+			<button>查看所有数据</button>
+			<button>结构</button>
+			<button>查询</button>
+			<button>导出</button>
+			<button>操作</button>
+			<button>Input Sql</button>
+			<hr size="20xp">
+			
+
+			<div class="table-responsive">
+			  <table class="table">
+			    <caption><h3>XXX 表数据</h3></caption>
+			    <thead>
+			      <tr>
+			        <th>产品</th>
+			        <th>付款日期</th>
+			        <th>状态</th></tr>
+			    </thead>
+			    <tbody>
+			      <tr>
+			        <td>产品1</td>
+			        <td>23/11/2013</td>
+			        <td>待发货</td></tr>
+			      <tr>
+			        <td>产品2</td>
+			        <td>10/11/2013</td>
+			        <td>发货中</td></tr>
+			      <tr>
+			        <td>产品3</td>
+			        <td>20/10/2013</td>
+			        <td>待确认</td></tr>
+			      <tr>
+			        <td>产品4</td>
+			        <td>20/10/2013</td>
+			        <td>已退货</td></tr>
+			    </tbody>
+			  </table>
+			</div>
+
+		</div>-->
+
+	</div>
+</div>	
+
+<script type="text/javascript">
+	/*
+	function get_db_state(){
+		$("#db_doing_pg").empty();
+		var db_state_from_dbpg = $("#db_state").text();
+		console.log(db_state_from_dbpg);
+		if(db_state_from_dbpg == "连接失败"){
+			$("#db_doing_pg").append("<h1 style='color: red;'><b>请连接数据库，成功连接后才开放此功能！</b></h1>");
+			return false;
+		}
+		else{
+			$("#db_doing_main").show();
+			return true;
+		}
+		
+	}
+
+	window.setInterval(function(){get_db_state()},1000);
+	*/
+</script>
+
+
+</body>
+
+
+
+</html>

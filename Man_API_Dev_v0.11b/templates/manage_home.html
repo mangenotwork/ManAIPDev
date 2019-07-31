@@ -1,0 +1,466 @@
+{% include 'head.html' %}
+
+
+
+{% include 'menu_bar.html' %}
+
+<div id="manage_div" style="width: 100%;height: 500px;padding-top: 145px;">
+
+	<div class="container-fluid">
+	  <div class="row-fluid">
+	    {% include 'manage_nav_tabs.html' %}
+
+
+
+	    <div class="span10" style="width: 80%;background-color: #DCDCDC;border:1px solid #000;">
+
+	      	<div id="project_button_div">
+	      		
+	      		<ul class="breadcrumb" style="margin: 0 0 -20px 0">
+					    <li>
+					    	<button class="btn btn-block btn-default" type="button" onclick="open_add_project_pg()">创建Flask项目</button>
+					    </li>
+					    <li>
+					    	<button class="btn btn-block btn-default" type="button" onclick="open_project_list_pg()">查看项目列表</button>
+					    </li>
+					    <li>
+					    	<button class="btn btn-block btn-default" type="button" >删除项目(无权限)</button>
+					    </li>
+					    
+					</ul>
+					<hr style="background-color: #000;height: 2px;">
+
+	  		</div>
+	  		<div id="project_list_div">
+	  			<div id="list_th" style="margin: 0 0 -20px 0;height: 50px;">
+	  				<table class="table table-condensed" >
+			      		<tr class="success">
+						    <th style="width: 10%">项目名称</th>
+						    <th style="width: 20%">项目简介</th>
+						    <th style="width: 10%">Port</th>
+						    <th style="width: 10%">状态</th>
+						    <th style="width: 50%">操作</th>
+						  </tr>
+
+					</table>
+					
+	  			</div>
+	  			<hr style="margin: 0 0 -2px 0;height: 2px;background-color: #fff;">
+	  			<div id="project_list" align="center" style="width: 100%;height: 500px;overflow:scroll;float: right;background-color: #686d6d;">
+	  				<script type="text/javascript">
+	  					$(document).ready(function(){
+	  					$("#project_list_table tr:even").addClass("info");    //设置偶数行的背景色
+						$("#project_list_table tr:odd").addClass("success");
+						 });    
+	  				</script>
+	  			<table class="table table-condensed" id="project_list_table" style="">
+	  				<tr class="project_tr_h">
+	  					<td style="width: 10%"><h4>Man API</h4></td>
+					    <td style="width: 20%">Man API flask</td>
+					    <td style="width: 10%"><a class="accordion-toggle" href="http://127.0.0.1:9888" target="_Blank">127.0.0.1:9888</a></td>
+					    <td style="width: 10%">
+					    	<span style="font-size:18px;color: #006400;">On<i class="fa fa-check"></i></span>
+					    </td>
+					    <td style="width: 50%">
+					    	无法对主进程操作
+					    </td>
+	  				</tr>
+
+
+	  				{% for project_list in all_project_list %}
+	  					
+	  						<tr class="project_tr_h">
+	  					
+					    <td style="width: 10%"><h4>{{project_list[0]}}</h4></td>
+					    <td style="width: 20%">{{project_list[1]}}</td>
+					    <td style="width: 10%"><a class="accordion-toggle" href="http://127.0.0.1:{{project_list[2]}}" target="_Blank">127.0.0.1:{{project_list[2]}}</a></td>
+					    <td style="width: 10%" id="{{project_list[0]}}_state">
+					    	<!--<span style="font-size:18px;color: #006400;">On <i class="fa fa-check"></i></span>-->
+					    	<span style="font-size:18px;color: #DC143C;">Off <i class="fa fa-off"></i></span>
+					    </td>
+					    <script type="text/javascript">
+					    	$(function(){$("[data-toggle='tooltip']").tooltip();})
+					    </script>
+					    <td style="width: 50%">
+					    
+					    	<button class="btn btn-primary accordion-toggle" data-toggle="tooltip" data-placement="top" title="打开&nbsp;API&nbsp;界面." type="button"><i class="fa fa-home"></i></button>
+					    	&nbsp;
+
+					    	<button class="btn btn-primary accordion-toggle" data-toggle="tooltip" data-placement="top" title="打开&nbsp;数据库&nbsp;界面." ><i class="fa fa-database"></i></button>
+					    	&nbsp;
+
+					    	<button class="btn btn-primary accordion-toggle" data-toggle="tooltip" data-placement="top" title="打开&nbsp;编程&nbsp;界面.">
+					    		<i class="fa fa-code"></i></button>
+					    		&nbsp;
+
+					    	<button class="btn btn-primary accordion-toggle" data-toggle="tooltip" data-placement="top" title="打开&nbsp;测试&nbsp;界面.">
+					    		<i class="fa fa-bug"></i></button>
+					    	    &nbsp;
+
+					    	<button class="btn btn-success accordion-toggle"  data-toggle="tooltip" data-placement="top" title="开&nbsp;&nbsp;机." id="{{project_list[0]}}_open" onclick="open_project_app(this) ">
+					    		<i class="fa fa-play-circle"></i></button>
+					    	&nbsp;
+
+					    	<button class="btn btn-danger accordion-toggle"  data-toggle="tooltip" data-placement="top" title="关&nbsp;&nbsp;机." id="{{project_list[0]}}_close" onclick="close_project_app(this)">
+					    		<i class="fa fa-stop-circle"></i>
+					    		</button>
+
+					    
+
+					    </td>
+					  </tr>
+					  
+
+					{% endfor %}
+				  
+				</table>
+	  		</div>
+	    </div>
+
+	    
+
+	    <div id="add_project_div" style="display: none;">
+
+	    <div class="panel panel-info" >
+                        <div class="panel-heading" >
+                            <h3 class="panel-title">创建项目</h3>
+                        </div>
+                        <div class="panel-body">
+					    	<form style="margin-left:100px;" id="add_project_Form" name="add_project_Form">
+					    		<div class="control-group">
+							    <label class="control-label">创建者</label>
+							     <div class="controls">
+					    		 	<input type="text" id="flask_user_name" name="flask_user_name" readonly="readonly">
+					    		 </div>
+					    		</div>
+							  <div class="control-group">
+							    <label class="control-label">项目名称</label>
+							    <div class="controls">
+							      <input type="text" name="project_name">
+							    </div>
+							  </div>
+							  <div class="control-group">
+							    <label class="control-label">项目简介</label>
+							    <div class="controls">
+							      <input type="text" name="project_title">
+							    </div>
+							  </div>
+							  <div class="control-group">
+							    <label class="control-label">项目端口</label>
+							    <div class="controls">
+							      <input type="text" name="project_port">
+							    </div>
+							  </div>
+							  <div class="control-group">
+							    <label class="control-label">项目数据库</label>
+							    <div class="controls">
+							      <input type="text" name="project_db">
+							    </div>
+							  </div>
+							  <div class="control-group">
+							    <label class="control-label">项目模板</label>
+							    <div class="controls" name="project_type">
+							      <select>
+									  <option>1</option>
+									  <option>2</option>
+									  <option>3</option>
+									  <option>4</option>
+									  <option>5</option>
+									</select>
+							    </div>
+							  </div>
+							  <div class="control-group">
+							    <label class="control-label">项目权限</label>
+							    <div class="controls">
+								  <select id="flask_project_acc" name="flask_project_acc">
+								      <option value="1">公开</option>
+								      <option value="0">私有</option>
+								      <option value="2">保密</option>
+								    </select>
+								</div>
+							  </div>
+
+							  </form>
+							  <div class="control-group">
+							    <div class="controls">
+							      
+							      <button class="btn btn-primary" id="add_project" onclick="post_project(this);"> 提交并创建 </button>
+							      <button type="button" class="btn"> 重填 </button>
+							    </div>
+							  </div>
+							
+                        </div>
+                    </div>
+	    <!--
+	    	<div style="margin-left:100px;">
+	    			<h2>创建项目</h2>
+	    		</div>
+	    		<hr>
+
+	    	<form style="margin-left:100px;" id="add_project_Form" name="add_project_Form">
+	    		
+			  <div class="control-group">
+			    <label class="control-label">项目名称</label>
+			    <div class="controls">
+			      <input type="text" name="project_name">
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">项目简介</label>
+			    <div class="controls">
+			      <input type="text" name="project_title">
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">项目端口</label>
+			    <div class="controls">
+			      <input type="text" name="project_port">
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">项目数据库</label>
+			    <div class="controls">
+			      <input type="text" name="project_db">
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">项目模板</label>
+			    <div class="controls" name="project_type">
+			      <select>
+					  <option>1</option>
+					  <option>2</option>
+					  <option>3</option>
+					  <option>4</option>
+					  <option>5</option>
+					</select>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <div class="controls">
+			      
+			      <button class="btn btn-primary" id="add_project" onclick="post_project(this)"> 提交并创建 </button>
+			      <button type="button" class="btn"> 重填 </button>
+			    </div>
+			  </div>
+			</form>
+			-->
+			<hr>
+	    </div>
+
+
+	  </div>
+	</div>
+
+
+</div>
+
+
+</body>
+<script type="text/javascript">
+
+//获取用户名
+function get_user_nowe_name(){
+        //alert($("#user_name").text());
+        //alert($("#user_name").text().split('"')[1]);
+        $("#flask_user_name").val("");
+        $("#flask_user_name").val($("#user_name").text().split('"')[1]);
+    }
+
+function open_add_project_pg(){
+	$("#add_project_div").show();
+	$("#project_list_div").hide();
+	get_user_nowe_name();
+}
+
+function open_project_list_pg(){
+	$("#add_project_div").hide();
+	$("#project_list_div").show();
+	get_project_state();
+}
+
+function get_post_data(data){
+	var get_datas = JSON.parse(data);
+	//alert(data);
+	location.reload();
+}
+
+function post_project(obj){
+	alert("post_project");
+	post_api_ajax(obj,get_post_data);
+}
+
+var open_project_wite_time = '<div id="open_project_wite_img" style="margin: 150px 0px 100px 0px"><img src="../static/man_api_img/wite.gif" style="width:200px;height:200px;"></div>'
+var open_show = '<span style="font-size:18px;color: #006400;">On</span>'
+var off_show = '<span style="font-size:18px;color: #DC143C;">Off <i class="fa fa-off"></i></span>'
+var nana_show = '<span style="font-size:18px;color: #DC143C;">NaNa <i class="fa fa-off"></i></span>'
+
+// 项目开机
+function open_project_app(obj){
+	
+	var get_project_name = obj.id.split('_');
+  	get_project_name.splice(get_project_name.length-1,get_project_name.length);
+  	project_name = get_project_name.join('_')
+  	//alert(project_name);
+  	var project_state_show_id = "#"+project_name+"_state";
+
+  	
+  	$("#project_list").append(open_project_wite_time);
+  	$("#project_list_table").hide();
+	$(project_state_show_id).empty();
+
+  	$.ajax({
+                 url: api_path+'/open_project',
+                 type: "POST",
+                 data:{
+                  project_name:project_name,
+                  },
+                 async : true,//默认设置下，所有请求均为异步请求
+                 cache : false, //设置为 false 将不会从浏览器缓存中加载请求信息。
+                 dataType: "json",
+                 
+                 success: function(data,status){
+                    
+                    //alert(status);
+                    //alert(data);
+                    //var get_datas = JSON.parse(data);
+                    $("#open_project_wite_img").remove();
+                    //alert(get_datas);
+                    $("#project_list_table").show();
+                    var project_state_show = data;
+                    
+                    if(project_state_show == 'open'){
+                    	$(project_state_show_id).append(open_show);
+                    }
+                    else{
+                    	$(project_state_show_id).append(open_show);
+                    }
+
+                 },
+                 
+                  error:function(jqXHR){
+                    $("#project_list_table").show();
+                    $("#open_project_wite_img").remove();
+                    $(project_state_show_id).append(off_show);
+                    console.log(jqXHR);
+                    alert(jqXHR);
+                    alert("open_project_app Error");
+                  }
+            }); 
+}
+
+
+// 项目关机
+function close_project_app(obj){
+
+	var get_project_name = obj.id.split('_');
+  	get_project_name.splice(get_project_name.length-1,get_project_name.length);
+  	project_name = get_project_name.join('_');
+  	alert(project_name);
+  	
+  	var project_state_show_id = "#"+project_name+"_state";
+
+  	
+  	$("#project_list").append(open_project_wite_time);
+  	$("#project_list_table").hide();
+	$(project_state_show_id).empty();
+	
+  	$.ajax({
+                 url: api_path+'/close_project',
+                 type: "POST",
+                 data:{
+                  project_name:project_name,
+                  },
+                 async : true,//默认设置下，所有请求均为异步请求
+                 cache : false, //设置为 false 将不会从浏览器缓存中加载请求信息。
+                 dataType: "json",
+                 
+                 success: function(data,status){
+                    
+                    
+                    //alert(status);
+                    //alert(data);
+                    $("#open_project_wite_img").remove();
+                    //alert(get_datas);
+                    $("#project_list_table").show();
+                    var project_state_show = data;
+                    
+                    if(project_state_show == 'kill pass'){
+                    	$(project_state_show_id).append(off_show);
+                    }
+                    else{
+                    	$(project_state_show_id).append(off_show);
+                    }
+					
+                 },
+                 
+                  error:function(jqXHR){
+                  	
+                    $("#project_list_table").show();
+                    $("#open_project_wite_img").remove();
+                    $(project_state_show_id).append(off_show);
+                    
+                    console.log(jqXHR);
+                    //alert(jqXHR);
+                    alert("open_project_app Error");
+                  }
+            }); 
+}
+
+
+
+function aa(datas){
+	//alert(datas);
+	var get_datas = JSON.parse(datas);
+	for (var index in get_datas){
+	    console.log(get_datas[index]);
+	    console.log(index);
+    	if(get_datas[index] == 'notopen'){
+    		var project_state_show_id = "#"+index+"_state";
+    		$(project_state_show_id).empty();
+    		$(project_state_show_id).append(off_show);
+    	}
+    	else if(get_datas[index] == 'open'){
+    		var project_state_show_id = "#"+index+"_state";
+    		$(project_state_show_id).empty();
+    		$(project_state_show_id).append(open_show);
+    	}
+    	else if(get_datas[index] == 'timewait'){
+    		var project_state_show_id = "#"+index+"_state";
+    		$(project_state_show_id).empty();
+    		$(project_state_show_id).append(off_show);
+    	}
+    	else{
+    		var project_state_show_id = "#"+index+"_state";
+    		$(project_state_show_id).empty();
+    		$(project_state_show_id).append(nana_show);
+    	}
+	}
+	$("#open_project_wite_img").remove();
+	$("#project_list_table").show();
+}
+
+//获取 project 状态
+function get_project_state(){
+	//alert("get_project_state");
+	
+	var get_project_state_url = "get_project_state";
+	get_api_ajax2(get_project_state_url,aa);
+	$("#project_list").append(open_project_wite_time);
+	$("#project_list_table").hide();
+}
+
+
+
+
+
+
+get_project_state();
+
+
+
+
+
+</script>
+
+
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Mygame_API</title>
+<META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
+<META HTTP-EQUIV="expires" CONTENT="0">
+  <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='man_api_img/man_ioc_2.png') }}">
+  <script src="{{ url_for('static', filename='js/jquery-2.1.1/jquery.min.js') }}" rel="stylesheet"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.js') }}" rel="stylesheet"></script>
+  <script src="{{ url_for('static', filename='js/api.js') }}" rel="stylesheet"></script>
+  <script src="{{ url_for('static', filename='js/jquery.cookie.js') }}" rel="stylesheet"></script>
+  <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css') }}" rel="stylesheet">
+</head>
+
+<body style="background: url(static/img/login_bk.png) no-repeat top left;
+    background-size: cover;">
+
+<div style="position: absolute;   
+            top: 45%;   
+            left: 40%;   ">
+
+<form class="form-search" id="user_login_Form" name="user_login_Form">
+<span class="help-inline" style="font-size: 25px; color: #000;"><i class="fa fa-user-secret"></i> : </span>
+<div class="input-prepend">
+    <input type="text" name="username" id="username" class="span3 search-query" placeholder="Username">
+</div><br><br>
+<span class="help-inline" style="font-size: 23px; color: #000;"><i class="fa fa-hand-o-right"></i> : </span>
+<div class="input-prepend">
+    <input type="password" name="password" id="password" class="span3 search-query" placeholder="Password">
+</div><br><br>
+<div  style="position: absolute;left: 16%;">
+<label class="checkbox">
+  <input type="checkbox" value="">
+  记住账号
+</label>
+</div>
+<br><br>
+<button class="btn btn-inverse btn-block btn-primary" type="button" id="user_login" onclick="login(this);">登陆</button>
+</form>
+
+</div>
+<script type="text/javascript">
+  var login_times = 0;
+  function login_return_show(datas){
+    //alert(datas);
+    var get_datas = JSON.parse(datas);
+    //alert(get_datas.response);
+    if(get_datas.response == 0){
+      alert("用户不存在");
+    }
+    else if(get_datas.response == 1){
+      alert("用户名或密码错误");
+    }
+    else if(get_datas.response == 2){
+      alert("该账户已登陆，不支持多端登陆！");
+    }
+    else if(get_datas.response == 100){
+      //document.cookie=get_datas.userToken;
+      $.cookie('man_user_token', null); 
+      var date= new Date();
+      date.setTime(date.getTime()+30*60*1000);
+      $.cookie('man_user_token', get_datas.userToken,{ expires : date}); 
+      window.location.href='/home';
+    }
+    else{
+      alert("登陆环境异常");
+    }
+  }  
+
+	function login(obj){
+		//window.location.href='/home';
+    //alert($("input#username").val());
+    //alert($("input#password").val());
+    if($("input#username").val() != '' && $("input#password").val() != ''){
+        login_times+=1
+        if(login_times<3){
+          post_api_ajax(obj,login_return_show);
+        }
+        else{
+          alert("你已重复登陆多次，请刷新");
+        }
+        }
+    else{
+      
+      alert("请输入用户名与用户密码！");
+      /*
+      
+        */
+      }
+    
+    
+    
+
+	}
+</script>
+
+</body>
+</html>

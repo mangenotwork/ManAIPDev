@@ -1,0 +1,611 @@
+{% include 'head.html' %}
+
+{% include 'menu_bar.html' %}
+
+
+<div id="manage_div" style="width: 100%;height: 500px;padding-top: 145px;">
+
+	<div class="container-fluid">
+	  <div class="row-fluid">
+	    {% include 'manage_nav_tabs.html' %}
+	    
+	<div class="span10" style="width: 80%;background-color: #DCDCDC;border:1px solid #000;">
+
+			<div id="project_button_div">
+	      		
+	      		<ul class="breadcrumb" style="margin: 0 0 -20px 0">
+	      				<li>
+					    	<button class="btn btn-block btn-default" type="button" data-toggle="modal" href="#create_Modal" onclick="get_group();">
+                            <i class="fa fa-plus"></i> 创建用户
+                        </button>
+					    </li>
+	      				<li>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-users"></i> {{ user_number }} 人&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        
+					    </li>
+
+					    
+					    <li>
+					    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;查找: <input type="text" class="form-control" aria-controls="dynamic-table">
+					    </li>
+					    
+					    
+					</ul>
+
+					<hr style="background-color: #000;height: 2px;">
+
+	  		</div>
+	  	
+	  		<div style="margin: -20px 0 -10px 0;background-color: #FFF;">
+				<table class="table table-bordered table-striped">
+                            <thead style="background-color: #000;color: #fff;">
+                            <tr>
+                                
+                                <th width="12%"><a><i class="fa fa-sort-alpha-asc"></i></a> 用户名 </th>
+                                <th width="8%"><a><i class="fa fa-sort-numeric-asc"></i></a> 权限</th>
+                                <th width="12%"><a><i class="fa fa-sort-alpha-asc"></i></a> 部门</th>
+                                <th width="12%"><a><i class="fa fa-sort-alpha-asc"></i></a> 组</th>
+                                <th width="48%">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="user_info_tb_list">
+                            {% for users in users_list %}
+                            <tr>
+                                <td>{{users[0]}}</td>
+                                <td>{{users[1]}}</td>
+                                <td>{{users[2]}}</td>
+                                <td>{{users[3]}}</td>
+                                 <td>
+                                 	<p>
+                                        
+                                        <button class="btn btn-success" type="button" data-toggle="modal" href="#user_info_Modal" id="{{users[0]}}_info" onclick="get_user_info(this);">
+                                        	<i class="fa fa-eye"></i> 查看 
+                                    	</button>
+
+                                        <button class="btn btn-info " type="button" data-toggle="modal" href="#updata_user_dg_Modal" id="{{users[0]}}_modify" onclick="modify_dg(this);">
+                                        	<i class="fa fa-exchange"></i> 更换部门/组
+                                    	</button>
+
+                                        <button class="btn btn-warning " type="button" data-toggle="modal" href="#updata_user_access_Modal" id="{{users[0]}}_access" onclick="modify_access(this);">
+                                        	<i class="fa fa-shield"></i> 修改权限
+                                    	</button>
+
+                                         {% if users[4] >0 %}
+                                        <button class="btn btn-danger" type="button" data-toggle="modal" href="#del_user_Modal" id="{{users[0]}}_del" onclick="modify_del(this);">
+                                            <i class="fa  fa-exclamation-triangle "></i>
+                                            {{users[4]}}禁用/删除
+                                        </button>
+                                        {% else %}
+                                        <button class="btn btn-primary" data-toggle="button" id="{{users[0]}}_open" onclick="set_open_user(this);">
+                                            <i class="fa  fa-check"></i>
+                                            {{users[4]}}启用
+                                        </button>
+                                        {% endif %}
+                                    </p>
+                                 </td>
+                            </tr>
+                            {% endfor %}
+                            
+                            
+                            </tbody>
+
+                        </table>
+                        <div class="pagination" style="text-align:center;">
+                        	<ul>
+                        		<li class="prev disabled"><a href="#">← Previous</a></li>
+                        		<li class="active"><a href="#">1</a></li>
+                        		<li><a href="#">2</a></li>
+                        		<li><a href="#">3</a></li>
+                        		<li><a href="#">4</a></li>
+                        		<li><a href="#">5</a></li>
+                        		<li class="next"><a href="#">Next → </a></li>
+                        	</ul>
+                        </div>
+
+        </div>
+			</div>
+
+	</div>
+</div>
+</div>
+</div>
+
+
+<!--创建用户  create_Modal -->
+<div class="modal fade" id="create_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+	<div class="modal-dialog" id="connect_db_input_wite">
+		<div class="modal-content" id="connect_db_input">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="colse_createModal()">×
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					创建用户 <div id="connect_db_return"></div>
+				</h4>
+			</div>
+			<div class="modal-body">
+
+			<form  id="add_user_Form" name="add_user_Form">
+				<pre>
+
+  用户名 : <input type="text" class="form-control" id="user" name="user">
+  用户名密码 : <input type="text" class="form-control" id="user_password" name="user_password">
+  选择部门 :<select class="form-control" id="user_department" name="user_department" onclick="get_group();">
+  	{% for departments in departments_list %}
+      <option>{{departments[0]}}</option>
+    {% endfor %}
+    </select>
+  选择组 :<select class="form-control" id="user_group" name="user_group" >
+      
+    </select>
+  设置权限 :<select class="form-control" id="user_access" name="user_access" style="width: 300px;">
+      {% for access in access_list %}
+      		<option value="{{access[0]}}">{{access[0]}} : {{access[1]}}</option>
+      {% endfor %}
+    </select>
+				</pre>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" 
+						data-dismiss="modal" onclick="colse_createModal()">关闭
+				</button>
+				<a type="button" class="btn btn-primary" id="add_user" onclick="add_users(this);">
+					提交并连接
+				</a>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+<!--查看用户信息  user_info_Modal -->
+<div class="modal fade" id="user_info_Modal" tabindex="-1" role="dialog" aria-labelledby="user_name_myModalLabel" aria-hidden="true" style="display:none;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+				</button>
+				<h4 class="modal-title" id="user_name_myModalLabel">
+					<div id="connect_db_return"></div>
+				</h4>
+			</div>
+			<div class="modal-body">
+
+  
+  <span> 用户ID : </span><span id="userid_info"></span><br>
+  <span> 用户名 : </span><span id="username_info"></span><br>
+  <span> 用户名密码 : </span><span id="userpassword_info"></span><br>
+  <span> 部门 : </span><span id="userdepartment_info"></span><br>
+  <span> 组 : </span><span id="usergroup_info"></span><br>
+  <span> 权限 : </span><span id="useraccess_info"></span><br>
+  <span> 是否使用(0:禁用;1:使用) : </span><span id="useremploy_info"></span><hr>
+  <span> 用户头像 : </span><span id="userhead_info"></span><hr>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" 
+						data-dismiss="modal">关闭
+				</button>
+			</div>
+		</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<!--修改用户组  updata_user_dg_Modal -->
+<div class="modal fade" id="updata_user_dg_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="colse_createModal()">×
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					修改用户部门和组
+				</h4>
+			</div>
+			<div class="modal-body">
+
+			<form  id="updata_user_department_Form" name="updata_user_department_Form">
+				<pre>
+
+  用户名 : <input class="input-xlarge" type="text" id="username_val" name="username_val" readonly="readonly"><hr>
+  用户部门 : <span id="userdepartment_val"></span>
+  选择部门 :<select class="form-control" id="user_department_dg" name="user_department_dg" onclick="get_group_modify_dg();">
+  	{% for departments in departments_list %}
+      <option>{{departments[0]}}</option>
+    {% endfor %}
+    </select><hr>
+ 
+  用户组 : <span id="usergroup_val"></span>
+  选择组 :<select class="form-control" id="user_group1" name="user_group1" >
+      
+    </select>
+				</pre>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" 
+						data-dismiss="modal" onclick="colse_createModal()">关闭
+				</button>
+				<a type="button" class="btn btn-primary" id="updata_user_department" onclick="post_modify_dg(this);">
+					提交并连接
+				</a>
+			</div>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+
+<!--修改用户权限  updata_user_access_Modal -->
+<div class="modal fade" id="updata_user_access_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="colse_createModal()">×
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					修改用户权限
+				</h4>
+			</div>
+			<div class="modal-body">
+
+			<form  id="updata_user_access_Form" name="updata_user_access_Form">
+				<pre>
+
+  用户名 : <input class="input-xlarge" type="text" id="acc_username_val" name="acc_username_val" readonly="readonly"><hr>
+  用户权限 : <span id="user_access_val"></span>
+  设置权限 :<select class="form-control" id="user_access_data" name="user_access_data" style="width: 300px;">
+      {% for access in access_list %}
+      		<option value="{{access[0]}}">{{access[0]}} : {{access[1]}}</option>
+      {% endfor %}
+    </select>
+				</pre>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" 
+						data-dismiss="modal" onclick="colse_createModal()">关闭
+				</button>
+				<a type="button" class="btn btn-primary" id="updata_user_access" onclick="post_modify_acc(this);">
+					提交并连接
+				</a>
+			</div>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<!--删除和禁用用户  del_user_Modal -->
+<div class="modal fade" id="del_user_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="colse_createModal()">×
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					禁用/删除-用户
+				</h4>
+			</div>
+			<div class="modal-body">
+
+			<form  id="user_name_Form" name="user_name_Form">
+				<pre>
+
+  用户名 : <input class="input-xlarge" type="text" id="user_names_val" name="user_names_val" readonly="readonly">
+</pre>
+  </form>
+  操作 : <button class="btn btn-danger" type="button" id="forbidden_user" onclick="forbidden_usergo()">禁用用户</button> 
+  <button class="btn btn-danger " type="button"  id="del_user"  onclick="del_usergo()">删除用户</button>
+				
+				
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" 
+						data-dismiss="modal" onclick="colse_createModal()">关闭
+				</button>
+			</div>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+
+<script type="text/javascript">
+function get_id(string_datas){
+	var names = string_datas.split('_');
+  	names.splice(names.length-1,names.length);
+  	name = names.join('_');
+  	return name
+}
+
+function get_user_info_val_data(user_info_datas){
+	var names = user_info_datas.split(',');
+  	return name
+}
+
+//添加用户 部门 组 选择项加载
+function group_show(datas){
+	//alert(datas);
+	var get_datas = JSON.parse(datas);
+	for(var dir_show_div in get_datas){
+			console.log(get_datas[dir_show_div]);
+			$("#user_group").append('<option>'+get_datas[dir_show_div]+'</option>');
+		}
+}
+
+	function get_group(){
+		//alert($("#user_department").val());
+		$("#user_group").empty();
+		
+		var url_strings = "usergroup_info?department_name="+$("#user_department").val();
+		get_api_ajax2(url_strings,group_show);
+
+		//$("#user_group").append('<option value="1">默认</option>');
+	}
+
+
+
+
+//修改用户 部门 组 选择项加载
+function group_show_dg(datas){
+	//alert(datas);
+	var get_datas = JSON.parse(datas);
+	for(var dir_show_div in get_datas){
+			console.log(get_datas[dir_show_div]);
+			$("#user_group1").append('<option>'+get_datas[dir_show_div]+'</option>');
+		}
+}
+
+function get_group_modify_dg(){
+	$("#user_group1").empty();
+	var url_strings = "usergroup_info?department_name="+$("#user_department_dg").val();
+	get_api_ajax2(url_strings,group_show_dg);
+}
+
+
+
+
+
+function add_user_show(datas){
+	//alert(datas);
+	var return_infos = JSON.parse(datas);
+	if(return_infos.return_data == "succees"){
+		alert("创建成功！");
+		location.reload();
+	}
+	else if(return_infos.return_data == 0){
+		alert("创建失败！");
+		location.reload();
+	}
+	else{
+		alert("程序错误！");
+	}
+}
+
+
+//添加用户
+function add_users(obj){
+	post_api_ajax(obj,add_user_show);
+
+}
+
+
+function colse_createModal(){
+	$("#user").val("");
+	$("#user_password").val("");
+	$("#create_Modal").hide();
+}
+
+
+function open_updata_1(){
+	$("#user_info1_Modal").show();
+}
+
+
+function set_user_infos(datas){
+	$("#user_name_myModalLabel").empty();
+	$("#userid_info").empty();
+	$("#username_info").empty();
+	$("#userpassword_info").empty();
+	$("#userdepartment_info").empty();
+	$("#usergroup_info").empty();
+	$("#useraccess_info").empty();
+	$("#userhead_info").empty();
+	$("#useremploy_info").empty();
+	//alert(datas);
+	var user_infos = JSON.parse(datas);
+	console.log(user_infos.user_uuid);
+	$("#user_name_myModalLabel").append(user_infos.user_name);
+	$("#userid_info").append(user_infos.user_uuid);
+	$("#username_info").append(user_infos.user_name);
+	$("#userpassword_info").append(user_infos.user_password);
+	$("#userdepartment_info").append(user_infos.user_department);
+	$("#usergroup_info").append(user_infos.user_group);
+	$("#useraccess_info").append(user_infos.user_access);
+	$("#userhead_info").append(user_infos.user_head);
+	$("#useremploy_info").append(user_infos.user_employ);
+	
+}
+
+function get_user_info(obj){
+	//alert(get_id(obj.id));
+	var get_user_info_url = "user_info/"+get_id(obj.id);
+	get_api_ajax2(get_user_info_url,set_user_infos);
+}
+
+
+
+
+//修改用户和组
+function modify_dg(obj){
+	//alert(obj);
+	get_group_modify_dg();
+	$("#username_val").val('');
+	$("#userdepartment_val").empty();
+	$("#usergroup_val").empty();
+	console.log(obj.id);
+	console.log($("#"+obj.id).closest("tr").find('td').eq(0).text());
+	$("#username_val").val($("#"+obj.id).closest("tr").find('td').eq(0).text());
+	//console.log($("#"+obj.id).closest("tr").find('td').eq(1).text());
+	console.log($("#"+obj.id).closest("tr").find('td').eq(2).text());
+	$("#userdepartment_val").append($("#"+obj.id).closest("tr").find('td').eq(2).text());
+	console.log($("#"+obj.id).closest("tr").find('td').eq(3).text());
+	$("#usergroup_val").append($("#"+obj.id).closest("tr").find('td').eq(3).text());
+
+	//post_api_ajax3("updata_user_department_Form",add_user_show);
+}
+
+//更新后的显示
+function post_modify_dg_return(datas){
+	//alert(datas);
+	var return_infos = JSON.parse(datas);
+	//alert(return_infos);
+	if(return_infos == "succees"){
+		alert("更改成功！");
+		location.reload();
+	}
+	else if(return_infos == 0){
+		alert("更改失败！");
+		location.reload();
+	}
+	else{
+		alert("程序错误！");
+	}
+}
+//更新 用户部门或者组
+function post_modify_dg(obj){
+	post_api_ajax(obj,post_modify_dg_return);
+}
+
+
+//更改用户权限
+function modify_access(obj){
+	$("#acc_username_val").val('');
+	$("#user_access_val").empty();
+	//alert(obj.id);
+	//alert($("#"+obj.id).closest("tr").find('td').eq(1).text());
+	$("#acc_username_val").val($("#"+obj.id).closest("tr").find('td').eq(0).text());
+	$("#user_access_val").append($("#"+obj.id).closest("tr").find('td').eq(1).text());
+}
+
+function post_modify_acc_return(datas){
+	//alert(datas);
+	var return_infos = JSON.parse(datas);
+	//alert(return_infos.return_data);
+	if(return_infos.return_data == "succees"){
+		alert("更改成功！");
+		location.reload();
+	}
+	else if(return_infos.return_data == 0){
+		alert("更改失败！");
+		location.reload();
+	}
+	else{
+		alert("程序错误！");
+	}
+}
+
+
+function post_modify_acc(obj){
+	post_api_ajax(obj,post_modify_acc_return);
+}
+
+
+
+//删除和禁用 user
+function modify_del(obj){
+	$("#user_names_val").val('');
+	$("#user_names_val").val($("#"+obj.id).closest("tr").find('td').eq(0).text());
+}
+
+
+//禁用用户
+function forbidden_usergo_return(datas){
+	//alert(datas);
+	var return_infos = JSON.parse(datas);
+	//alert(return_infos.return_data);
+	if(return_infos.return_data == "succees"){
+		alert("操作成功！");
+		location.reload();
+	}
+	else if(return_infos.return_data == 0){
+		alert("操作失败！");
+		location.reload();
+	}
+	else{
+		alert("程序错误！");
+	}
+}
+
+function forbidden_usergo(){
+	post_api_ajax3("user_name_Form","forbidden_user",forbidden_usergo_return);
+}
+//删除用户
+function del_usergo_return(datas){
+	//alert(datas);
+	var return_infos = JSON.parse(datas);
+	//alert(return_infos.return_data);
+	if(return_infos.return_data == "succees"){
+		alert("操作成功！");
+		location.reload();
+	}
+	else if(return_infos.return_data == 0){
+		alert("操作失败！");
+		location.reload();
+	}
+	else{
+		alert("程序错误！");
+	}
+}
+
+function del_usergo(){
+	post_api_ajax3("user_name_Form","del_user",del_usergo_return);
+}
+
+
+
+//启用用户
+
+function open_user_return(datas){
+	//alert(datas);
+	var return_infos = JSON.parse(datas);
+	//alert(return_infos.return_data);
+	if(return_infos.return_data == "succees"){
+		alert("操作成功！");
+		location.reload();
+	}
+	else if(return_infos.return_data == 0){
+		alert("操作失败！");
+		location.reload();
+	}
+	else{
+		alert("程序错误！");
+	}
+}
+
+function set_open_user(obj){
+	//alert(get_id(obj.id));
+	var url_strings = "shift_user/"+get_id(obj.id);
+	//alert(url_strings);
+	get_api_ajax2(url_strings,open_user_return);
+}
+
+
+
+</script>
+
+
+</body>
+</html>

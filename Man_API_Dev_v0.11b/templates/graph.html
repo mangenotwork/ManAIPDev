@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 30%;"></div>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+
+var project_name = "项目分支图"
+var branch_data = [{
+                    name: '主分支',
+                    x: 10,
+                    y: 300,
+                    itemStyle: {
+                        color: '#0066CC'
+                    },
+                   value:["[Main] 2019-03-03"]
+
+                }, 
+                    {
+                    name: '主分支v1.0',
+                    x: 40,
+                    y: 300,
+                    itemStyle: {
+                        color: '#0066CC'
+                    },
+                    value:["[Main] 2019-03-03"]
+                }, 
+                    {
+                    name: '等待发布',
+                    x: 70,
+                    y: 300,
+                    itemStyle: {
+                        color: '#0066CC'
+                    },
+                    value:["[Main] 2019-03-03"]
+                }, 
+                    {
+                    name: '分支',
+                    x: 20,
+                    y: 310,
+                    value:["[Branch] 2019-03-03"]
+                }];
+
+
+link_info = [{
+                    source: '主分支',
+                    target: '主分支v1.0'
+                }, 
+                    {
+                    source: '主分支v1.0',
+                    target: '等待发布'
+                },
+                    {
+                    source: '分支',
+                    target: '主分支v1.0'
+                },
+                    {
+                        source: '主分支',
+                        target: '分支'
+                }];
+
+option = null;
+option = {
+    
+    title: {
+        text: project_name
+    },
+
+    tooltip: {},
+    animationDurationUpdate: 1500,
+    animationEasingUpdate: 'quinticInOut',
+    series : [
+        {
+            type: 'graph',
+            layout: 'none',
+            symbolSize: 80,
+            roam: true,
+            label: {
+                normal: {
+                    show: true
+                }
+            },
+            edgeSymbol: ['circle', 'arrow'],
+            edgeSymbolSize: [4, 10],
+            edgeLabel: {
+                normal: {
+                    textStyle: {
+                        fontSize: 20
+                    }
+                }
+            },
+
+
+            data: branch_data,
+
+
+            links: link_info,
+
+
+            lineStyle: {
+                normal: {
+                    opacity: 0.9,
+                    width: 2,
+                    curveness: 0
+                }
+            }
+        }
+    ]
+};;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>
