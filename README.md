@@ -9,8 +9,8 @@
     4. 拥有拷贝项目功能
     5. 拥有提交代码，下载代码，查询与在线修改代码功能
     
-
 ##项目环境
+
     1. python37 flask
     2. Redis-x64-3.2.100
     3. windows运行环境
@@ -21,7 +21,6 @@
 
 
 ##项目截图
-    
     ![](http://hbsj.xyz/manapi/manapi1.png)  <br>
     ![](http://hbsj.xyz/manapi/manapi2.png)  <br>
     ![](http://hbsj.xyz/manapi/manapi3.png)  <br>
